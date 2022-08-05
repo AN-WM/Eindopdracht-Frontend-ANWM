@@ -14,50 +14,54 @@ import './App.css';
 
 function App() {
 
-  const apiKey = '5d77ac405bbd4ac9972f3543df74af8c';
+    const apiKey = '5d77ac405bbd4ac9972f3543df74af8c';
 
-  return (
-      <>
-          <Router>
-              <Header/>
-              <div
-                  className="inhoud"
-              >
-                  <Routes>
-                      <Route
-                          path="/"
-                          element={
-                            <Homepage
-                                country={"nl"}
-                                apikey={apiKey}
+    return (
+        <>
+            <Router>
+                <div
+                    className="page"
+                >
+                    <Header/>
+                    <div
+                        className="inhoud"
+                    >
+                        <Routes>
+                            <Route
+                                path="/"
+                                element={
+                                    <Homepage
+                                        country={"nl"}
+                                        apikey={apiKey}
+                                    />
+                                }
                             />
-                          }
-                      />
 
-                      <Route
-                          path="/search-results"
-                          element={<Searchpage/>}
-                      />
+                            <Route
+                                path="/search-results"
+                                element={<Searchpage/>}
+                            />
 
-                      <Route
-                          path="/:article-id"
-                          element={<Articlepage/>}
-                      />
+                            <Route
+                                path="/:article-id"
+                                element={<Articlepage/>}
+                            />
 
-                      <Route
-                          path="/login"
-                          element={<Loginpage/>}
-                      />
+                            <Route
+                                path="/login"
+                                element={<Loginpage/>}
+                            />
 
-                      <Route
-                          path="/profile"
-                          element={<Profilepage/>}
-                      />
-                  </Routes>
-              </div>
-          </Router>
-      </>
-  );
+                            <Route
+                                path="/profile"
+                                element={<Profilepage/>}
+                            />
+                        </Routes>
+                    </div>
+                </div>
+            </Router>
+        </>
+    );
 }
 
 export default App;

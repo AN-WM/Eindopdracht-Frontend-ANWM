@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
+body {
+    color: hsl(0, 0%, 0%);
+    font-weight: 400;
+    font-size: 14px;
+    font-family: 'Lato', Arial, sans-serif;
+    box-sizing: border-box;
+}
+
+.page {
+    background-color: hsl(0, 0%, 90%));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.inhoud {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h2 {
+    font-weight: 900;
+    font-size: 1rem;
+}
+
+h2, p {
+    margin: 5px 0;
+}
+
+p {
+    font-size: 0.9rem;
+}

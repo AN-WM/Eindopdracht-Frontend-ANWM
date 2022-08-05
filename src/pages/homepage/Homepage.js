@@ -31,8 +31,9 @@ function Homepage({country, apikey}) {
     return (
         <>
             <img src={logo} alt="App logo" className="large-logo"/>
-            <Searchbar/>
-            <div>Home</div>
+            <Searchbar
+                inputType = 'article'
+            />
             {error &&
                 <span>
                     Oeps, er ging iets mis!
