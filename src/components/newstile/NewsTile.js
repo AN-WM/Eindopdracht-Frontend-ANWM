@@ -4,7 +4,7 @@ import logo from "../../assets/News logo icon.png";
 import clipText from "../../helpers/clipText";
 import dateNotation from "../../helpers/dateNotation";
 
-function NewsTile({article, key, error, toggleError}) {
+function NewsTile({article, error, toggleError}) {
     const cutOff = article.title.lastIndexOf("-");
     const cleanTitle = article.title.substring(0, cutOff - 1);
     let newsImage = (article.urlToImage === null) ? logo : article.urlToImage;

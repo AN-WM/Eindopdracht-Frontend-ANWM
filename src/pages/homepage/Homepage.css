@@ -11,4 +11,6 @@
 
 .large-logo {
     width: 225px;
+    height: 230px;
+    object-fit: contain;
 }

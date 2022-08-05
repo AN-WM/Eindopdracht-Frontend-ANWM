@@ -9,7 +9,6 @@ import Searchpage from "./pages/searchpage/Searchpage.js"
 import Articlepage from "./pages/articlepage/Articlepage.js"
 import Loginpage from "./pages/loginpage/Loginpage.js"
 import Profilepage from "./pages/profilepage/Profilepage.js"
-import Header from "./components/header/Header.js"
 import './App.css';
 
 function App() {
@@ -22,7 +21,6 @@ function App() {
                 <div
                     className="page"
                 >
-                    <Header/>
                     <div
                         className="inhoud"
                     >

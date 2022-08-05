@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import logo from "../../assets/Newslogo.png";
 import Searchbar from "../../components/searchbar/Searchbar";
 import NewsTile from "../../components/newstile/NewsTile";
+import Header from "../../components/header/Header";
 import axios from "axios";
 import './Homepage.css';
 
@@ -16,9 +17,7 @@ function Homepage({country, apikey}) {
             try {
                 const result = await axios.get(`https://newsapi.org/v2/top-headlines?country=${country}&apiKey=${apikey}`);
                 setNewslist(result.data.articles);
-                console.log(result.data.articles);
-            }
-            catch (e) {
+            } catch (e) {
                 console.log(e);
                 toggleError(true);
             }
@@ -30,9 +29,12 @@ function Homepage({country, apikey}) {
 
     return (
         <>
+            <Header
+                page='home'
+            />
             <img src={logo} alt="App logo" className="large-logo"/>
             <Searchbar
-                inputType = 'article'
+                inputType='article'
             />
             {error &&
                 <span>
@@ -44,7 +46,7 @@ function Homepage({country, apikey}) {
                     newslist.map((input) => {
                         return (
                             <NewsTile
-                                article = {input}
+                                article={input}
                                 key={input.url}
                                 error={error}
                                 toggleError={toggleError}

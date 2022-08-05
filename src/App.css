@@ -33,3 +33,12 @@ h2, p {
 p {
     font-size: 0.9rem;
 }
+
+button {
+    background-color: var(--tile-background);
+    box-shadow: 1px 1px 4px 0px hsl(196, 15%, 70%);
+    border: 0px;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 1rem;
+}
