@@ -1,0 +1,14 @@
+.search-page-container {
+    display: flex;
+}
+
+.search-list {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    flex-grow: 0;
+    flex-shrink: 1;
+}

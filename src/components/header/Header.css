@@ -6,6 +6,10 @@
     width: 1200px;
 }
 
+.header-logo {
+    height: 117px;
+}
+
 .right-container {
     display: flex;
     justify-content: space-between;

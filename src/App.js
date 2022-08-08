@@ -29,7 +29,7 @@ function App() {
                                 path="/"
                                 element={
                                     <Homepage
-                                        country={"nl"}
+                                        country="nl"
                                         apikey={apiKey}
                                     />
                                 }
@@ -37,7 +37,14 @@ function App() {
 
                             <Route
                                 path="/search-results"
-                                element={<Searchpage/>}
+                                element={
+                                    <Searchpage
+                                        searchkey="test"
+                                        searchtype="article"
+                                        country="nl"
+                                        apikey={apiKey}
+                                    />
+                                }
                             />
 
                             <Route

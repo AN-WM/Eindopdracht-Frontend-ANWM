@@ -5,8 +5,8 @@ import clipText from "../../helpers/clipText";
 import dateNotation from "../../helpers/dateNotation";
 
 function NewsTile({article, error, toggleError}) {
-    const cutOff = article.title.lastIndexOf("-");
-    const cleanTitle = article.title.substring(0, cutOff - 1);
+    const cutOff = article.title.lastIndexOf(" - ");
+    let cleanTitle = (cutOff >= 0) ? article.title.substring(0, cutOff - 1) : article.title;
     let newsImage = (article.urlToImage === null) ? logo : article.urlToImage;
 
     return (
