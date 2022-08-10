@@ -1,6 +1,5 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './FilterBlock.css';
-import NewsTile from "../newstile/NewsTile";
 
 let languageArray = [{
     language: "ar",
@@ -44,13 +43,16 @@ let languageArray = [{
     full: "Chinese"
 }]
 
+let briefLanguageArray = languageArray.slice(0, 5);
 // Date
 // Source    - Uit bron
 // Language  -
 // Author      Uit bron
 // Sort by
 
-function createBlock(blockType) {
+function CreateBlock(blockType) {
+    const [languageList, toggleLanguageList] = useState(false);
+
     switch (blockType) {
         case 'date':
             // code block
@@ -59,33 +61,70 @@ function createBlock(blockType) {
             // code block
             return <p>Ik ben een bron</p>;
         case 'language':
-            return <div className="filterBlock">
-                {languageArray.map((input) => {
-                    return (
-                        <div className="select-option">
-                            <input type="checkbox" id={input.language} name={input.language} value={input.language}/>
-                            <label htmlFor={input.language}>{input.full}</label>
-                        </div>
-                    )
-                })
-                }
-            </div>;
-        case 'author':
-            //code block
-            return <p>Ik ben een auteur</p>;
-        case 'sort':
-            //code block
-            return <p>Ik ben een sorteerkeuze</p>;
-        default:
-        // code block
-    }
+            return (languageList === false ?
+                //Basis array van talen, met knop om meer talen te tonen.
+                <div className="filterBlock">
+                    {briefLanguageArray.map((input) => {
+                        return (
+                            <div className="select-option">
+                                <input type="checkbox" id={input.language} name={input.language}
+                                       value={input.language}/>
+                                <label htmlFor={input.language}>{input.full}</label>
+                            </div>
+                        )
+                    })}
+
+                    <button
+                        type="button"
+                        className="see-more"
+                        onClick={() => toggleLanguageList(!languageList)}
+                    >
+                        See more
+                    </button>
+                </div>
+                :
+                //Uitgebreide array van talen, met knop om minder opties te tonen.
+                <div className="filterBlock">
+                    {languageArray.map((input) => {
+                        return (
+                            <div className="select-option">
+                                <input type="checkbox" id={input.language} name={input.language}
+                                       value={input.language}/>
+                                <label htmlFor={input.language}>{input.full}</label>
+                            </div>
+                        )
+                    })}
+
+                    <button
+                        type="button"
+                        className="see-more"
+                        onClick={() => toggleLanguageList(!languageList)}
+                    >
+                        See less
+                    </button>
+                </div>);
+
+case
+    'author'
+:
+    //code block
+    return <p>Ik ben een auteur</p>;
+case
+    'sort'
+:
+    //code block
+    return <p>Ik ben een sorteerkeuze</p>;
+default:
+    // code block
+}
 }
 
 function FilterBlock({blockType, input}) {
+
     return (
         <>
             <h3>{blockType}</h3>
-            {createBlock(blockType)}
+            {CreateBlock(blockType)}
         </>
     );
 }
