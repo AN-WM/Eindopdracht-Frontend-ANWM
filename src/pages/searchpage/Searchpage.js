@@ -9,7 +9,6 @@ import './Searchpage.css';
 function Searchpage({searchkey, searchtype, country, apikey}) {
     const [error, toggleError] = useState(false);
     const [newslist, setNewslist] = useState();
-    const [totalResults, setTotalResults] = useState();
 
     useEffect(() => {
         toggleError(false);
@@ -17,7 +16,6 @@ function Searchpage({searchkey, searchtype, country, apikey}) {
         async function fetchData() {
             try {
                 const result = await axios.get(`https://newsapi.org/v2/everything?q=${searchkey}&apiKey=${apikey}`);
-                setTotalResults(result.data.totalResults);
                 setNewslist(result.data.articles);
 
             } catch (e) {
@@ -50,7 +48,6 @@ function Searchpage({searchkey, searchtype, country, apikey}) {
                 <FilterBar
                     searchType={searchtype}
                     input={newslist}
-                    totalResults={totalResults}
                 />
 
                 <div className="search-list">

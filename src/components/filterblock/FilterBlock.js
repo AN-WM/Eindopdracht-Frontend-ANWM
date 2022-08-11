@@ -44,14 +44,17 @@ let languageArray = [{
 }]
 
 let briefLanguageArray = languageArray.slice(0, 5);
+
 // Date
 // Source    - Uit bron
 // Language  -
 // Author      Uit bron
 // Sort by
 
-function CreateBlock(blockType) {
-    const [languageList, toggleLanguageList] = useState(false);
+function CreateBlock(blockType, inputList) {
+    const [languageBrief, toggleLanguageBrief] = useState(false);
+    const [authorBrief, toggleAuthorBrief] = useState(false);
+    const [sourceBrief, toggleSourceBrief] = useState(false);
 
     switch (blockType) {
         case 'date':
@@ -61,15 +64,23 @@ function CreateBlock(blockType) {
             // code block
             return <p>Ik ben een bron</p>;
         case 'language':
-            return (languageList === false ?
+            return (languageBrief === false ?
                 //Basis array van talen, met knop om meer talen te tonen.
                 <div className="filterBlock">
                     {briefLanguageArray.map((input) => {
                         return (
                             <div className="select-option">
-                                <input type="checkbox" id={input.language} name={input.language}
-                                       value={input.language}/>
-                                <label htmlFor={input.language}>{input.full}</label>
+                                <input
+                                    type="checkbox"
+                                    id={input.language}
+                                    name={input.language}
+                                    value={input.language}
+                                />
+                                <label
+                                    htmlFor={input.language}
+                                >
+                                    {input.full}
+                                </label>
                             </div>
                         )
                     })}
@@ -77,7 +88,7 @@ function CreateBlock(blockType) {
                     <button
                         type="button"
                         className="see-more"
-                        onClick={() => toggleLanguageList(!languageList)}
+                        onClick={() => toggleLanguageBrief(!languageBrief)}
                     >
                         See more
                     </button>
@@ -98,33 +109,85 @@ function CreateBlock(blockType) {
                     <button
                         type="button"
                         className="see-more"
-                        onClick={() => toggleLanguageList(!languageList)}
+                        onClick={() => toggleLanguageBrief(!languageBrief)}
                     >
                         See less
                     </button>
                 </div>);
 
-case
-    'author'
-:
-    //code block
-    return <p>Ik ben een auteur</p>;
-case
-    'sort'
-:
-    //code block
-    return <p>Ik ben een sorteerkeuze</p>;
-default:
-    // code block
-}
+        case
+        'author'
+        :
+            //code block
+            if (inputList !== undefined) {
+                let briefList = inputList.slice(0, 5);
+                return (authorBrief === false ?
+                    //Basic author list, with button to show more
+                    <div className="filterBlock">
+                        {briefList.map((input) => {
+                            return (
+                                <div className="select-option">
+                                    <input
+                                        type="checkbox"
+                                        id={input}
+                                        name={input}
+                                        value={input}
+                                    />
+                                    <label
+                                        htmlFor={input}
+                                    >
+                                        {input}
+                                    </label>
+                                </div>
+                            )
+                        })}
+
+                        <button
+                            type="button"
+                            className="see-more"
+                            onClick={() => toggleAuthorBrief(!authorBrief)}
+                        >
+                            See more
+                        </button>
+                    </div>
+                    :
+                    //Uitgebreide array van talen, met knop om minder opties te tonen.
+                    <div className="filterBlock">
+                        {inputList.map((input) => {
+                            return (
+                                <div className="select-option">
+                                    <input type="checkbox" id={input} name={input}
+                                           value={input}/>
+                                    <label htmlFor={input}>{input}</label>
+                                </div>
+                            )
+                        })}
+
+                        <button
+                            type="button"
+                            className="see-more"
+                            onClick={() => toggleAuthorBrief(!authorBrief)}
+                        >
+                            See less
+                        </button>
+                    </div>
+                );
+            } break;
+        case
+        'sort'
+        :
+            //code block
+            return <p>Ik ben een sorteerkeuze</p>;
+        default:
+        // code block
+    }
 }
 
-function FilterBlock({blockType, input}) {
-
+function FilterBlock({blockType, inputList}) {
     return (
         <>
             <h3>{blockType}</h3>
-            {CreateBlock(blockType)}
+            {CreateBlock(blockType, inputList)}
         </>
     );
 }

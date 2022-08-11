@@ -1,26 +1,19 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import FilterBlock from "../filterblock/FilterBlock";
 import './FilterBar.css'
+import createList from "../../helpers/createList";
 
-function FilterBar({searchType, input, totalResults}) {
+function FilterBar({searchType, input}) {
+    const [authorList, setAuthorList] = useState();
+    const [sourceList, setSourceList] = useState();
 
-    // console.log(input);
-    //
-    // let sourceList = new Set();
-    // let authorList = new Set();
-    //
-    // for (let x = 0; x <= (totalResults - 1); x++) {
-    //     // console.log(input[x].author);
-    //     let author = input[x].author;
-    //     // console.log(author);
-    //     authorList.add(author);
-    //     // if (input[x].source.name !== undefined) {
-    //     // sourceList.add(input[x].source.name);}
-    //     // authorList.add(input[x].author);
-    // }
-    // //
-    // // console.log(sourceList);
-    // console.log(authorList);
+    useEffect(() => {
+            if (input !== undefined) {
+                setAuthorList(createList(input, 'author'));
+                setSourceList(createList(input, 'source'));
+            }
+        }, [input]
+    )
 
     return (
         <div className="filter-bar">
@@ -32,19 +25,19 @@ function FilterBar({searchType, input, totalResults}) {
             {searchType === 'article' &&
                 <FilterBlock
                     blockType="source"
-                    input="input"
+                    input={sourceList}
                 />}
 
             {searchType === 'article' &&
                 <FilterBlock
-                blockType="language"
-                input="input"
+                    blockType="language"
+                    inputList="input"
                 />
             }
 
             <FilterBlock
                 blockType="author"
-                input="input"
+                inputList={authorList}
             />
 
             <FilterBlock
