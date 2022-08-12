@@ -1,4 +1,18 @@
-.see-more {
+.filter-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 250px;
+}
+
+.date-label {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 160px;
+}
+
+.see-more, .see-less {
     position: relative;
     background: none;
     border: none;
@@ -9,18 +23,28 @@
     font-style: italic;
 }
 
-.see-more::before, .see-more::after {
+.see-more::before, .see-more::after, .see-less::before, .see-less::after {
     content: "";
     width: 1px;
     height: 0.5rem;
     background-color: black;
     display: block;
     position: absolute;
+    transform-origin: bottom;
+}
+
+.see-more::before, .see-more::after {
     top: 8px;
     right: 0;
     bottom: 0;
     left: 10px;
-    transform-origin: bottom;
+}
+
+.see-less::before, .see-less::after {
+    top: 1px;
+    right: 0;
+    bottom: 0;
+    left: 10px;
 }
 
 .see-more::before {
@@ -32,3 +56,10 @@
 
 }
 
+.see-less::before {
+    transform: rotate(+135deg);
+}
+
+.see-less::after {
+    transform: rotate(-135deg);
+}

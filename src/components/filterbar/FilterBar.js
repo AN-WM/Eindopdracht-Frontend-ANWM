@@ -25,7 +25,7 @@ function FilterBar({searchType, input}) {
             {searchType === 'article' &&
                 <FilterBlock
                     blockType="source"
-                    input={sourceList}
+                    inputList={sourceList}
                 />}
 
             {searchType === 'article' &&
