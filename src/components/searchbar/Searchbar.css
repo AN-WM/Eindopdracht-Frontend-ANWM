@@ -17,14 +17,7 @@
 }
 
 #search-bar {
-    width: 371px;
-    height: 40px;
-    border: 1px solid hsl(197, 12%, 29%);
-    border-radius: 4px;
     text-align: center;
-    font-weight: 300;
-    font-size: 1rem;
-    box-sizing: border-box;
 }
 
 #search-button {

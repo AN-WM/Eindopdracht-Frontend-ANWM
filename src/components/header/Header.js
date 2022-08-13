@@ -28,13 +28,15 @@ function Header({page}) {
                             onClick={login}
                         />
                         : <p></p>}
-                    <button
-                        type="button"
-                        className="login-button"
-                        onClick={login}
-                    >
-                        Login
-                    </button>
+                    {pageType !== 'registration' && pageType !== 'login'
+                        ? <button
+                            type="button"
+                            className="login-button"
+                            onClick={login}
+                        >
+                            Login
+                        </button>
+                        : <p></p>}
                 </div>
             </div>
         </>

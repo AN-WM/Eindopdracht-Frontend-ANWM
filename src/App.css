@@ -34,11 +34,30 @@ p {
     font-size: 0.9rem;
 }
 
+button, .input-bar, a {
+    font-size: 1rem;
+}
+
 button {
     background-color: var(--tile-background);
     box-shadow: 1px 1px 4px 0px hsl(196, 15%, 70%);
     border: 0px;
     border-radius: 4px;
     box-sizing: border-box;
-    font-size: 1rem;
 }
+
+a {
+    text-decoration: none;
+    font-style: italic;
+    color: black;
+}
+
+.input-bar {
+    width: 371px;
+    height: 40px;
+    border: 1px solid hsl(197, 12%, 29%);
+    border-radius: 4px;
+    font-weight: 300;
+    box-sizing: border-box;
+}
+

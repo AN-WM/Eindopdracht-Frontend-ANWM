@@ -29,6 +29,7 @@ function Searchbar({inputType}) {
                 <div className="search-container-left">
                     <input
                         type="text"
+                        className="input-bar"
                         id="search-bar"
                         placeholder="Search the news"
                         value={searchValue}

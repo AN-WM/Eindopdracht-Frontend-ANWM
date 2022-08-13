@@ -10,6 +10,7 @@ import Articlepage from "./pages/articlepage/Articlepage.js"
 import Loginpage from "./pages/loginpage/Loginpage.js"
 import Profilepage from "./pages/profilepage/Profilepage.js"
 import './App.css';
+import Registerpage from "./pages/registerpage/Registerpage";
 
 function App() {
 
@@ -54,7 +55,21 @@ function App() {
 
                             <Route
                                 path="/login"
-                                element={<Loginpage/>}
+                                element={
+                                    <Loginpage
+                                        searchtype="article"
+
+                                    />
+                                }
+                            />
+
+                            <Route
+                                path="/register"
+                                element={
+                                    <Registerpage
+                                        searchtype="article"
+                                    />
+                                }
                             />
 
                             <Route
