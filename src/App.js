@@ -74,7 +74,11 @@ function App() {
 
                             <Route
                                 path="/profile"
-                                element={<Profilepage/>}
+                                element={
+                                    <Profilepage
+                                        searchtype="article"
+                                    />
+                                }
                             />
                         </Routes>
                     </div>

@@ -1,8 +1,3 @@
-body {
-    --tile-width: 210px;
-    --tile-background: hsl(200, 25%, 95%);
-}
-
 .news-tile {
     background-color: var(--tile-background);
     display: flex;

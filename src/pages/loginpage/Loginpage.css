@@ -1,9 +1,3 @@
-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
 .login-detail {
     margin: 5px 0;
     text-indent: 5px;

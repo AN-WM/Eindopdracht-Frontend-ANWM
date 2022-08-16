@@ -6,6 +6,9 @@ body {
     font-size: 14px;
     font-family: 'Lato', Arial, sans-serif;
     box-sizing: border-box;
+    --tile-width: 210px;
+    --tile-background: hsl(200, 25%, 95%);
+    --input-width: 371px;
 }
 
 .page {
@@ -46,6 +49,12 @@ button {
     box-sizing: border-box;
 }
 
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 a {
     text-decoration: none;
     font-style: italic;
@@ -53,7 +62,7 @@ a {
 }
 
 .input-bar {
-    width: 371px;
+    width: var(--input-width);
     height: 40px;
     border: 1px solid hsl(197, 12%, 29%);
     border-radius: 4px;

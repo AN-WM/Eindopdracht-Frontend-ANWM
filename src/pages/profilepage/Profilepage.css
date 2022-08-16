@@ -1,0 +1,33 @@
+.profile-form {
+    width: 525px;
+    position: relative;
+    left: -77px;
+}
+
+.profile-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: inherit;
+    font-size: 1rem;
+}
+
+.button-container {
+    width: var(--input-width);
+    display: flex;
+    align-self: flex-end;
+    justify-content: center;
+}
+
+#country-info {
+    width: var(--input-width);
+    align-self: flex-end;
+    text-align: center;
+}
+
+#update-button {
+    width: 250px;
+    height: 40px;
+    margin: 15px 0;
+}
