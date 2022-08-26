@@ -1,67 +1,61 @@
-import React from 'react';
+import React, {useContext} from 'react';
+import {useForm} from 'react-hook-form';
+import {SearchContext} from "../../context/SearchContext";
+import {useNavigate} from 'react-router-dom';
 import './Searchbar.css';
 
-function Searchbar({inputType}) {
-    const [searchValue, setSearchValue] = React.useState('');
-    const [searchType, setSearchType] = React.useState(inputType);
+function Searchbar() {
+    const {searchValue: {searchTerm, searchType}, searchFunction} = useContext(SearchContext);
+    const navigate = useNavigate();
 
-    const handleChange = e => {
-        const target = e.target;
-        if (target.checked) {
-            setSearchType(target.value);
+    const {handleSubmit, register} = useForm({
+        defaultValues: {
+            searchTerm: searchTerm,
+            searchType: searchType
         }
-    };
+    });
 
-    function onFormSubmit(e) {
-        e.preventDefault();
-        console.log("Ik ga zoeken naar:");
-        console.log(searchValue);
-        console.log("en het type is:")
-        console.log(searchType);
+    function onFormSubmit(formData) {
+        //Put search details in context
+        searchFunction(formData.searchInput, formData.searchType);
+
+
+        //Navigate to the search results
+        navigate('/search-results');
     }
 
     return (
         <form
             className="search-form"
-            onSubmit={onFormSubmit}
+            onSubmit={handleSubmit(onFormSubmit)}
         >
             <div className="search-bar-container">
                 <div className="search-container-left">
                     <input
                         type="text"
                         className="input-bar"
-                        id="search-bar"
                         placeholder="Search the news"
-                        value={searchValue}
-                        onChange={(e) => setSearchValue(e.target.value)}
+                        {...register("searchInput")}
                     />
 
                     <div className="radio-group">
-                        <input
-                            type="radio"
-                            id="article"
-                            name="search-type"
-                            checked= {searchType === 'article'}
-                            value="article"
-                            onChange={handleChange}
-                        />
-                        <label
-                            htmlFor="article"
-                        >
+                        <label>
+                            <input
+                                type="radio"
+                                value="article"
+                                {...register("searchType", {required: true})}
+                            />
+
                             Find article
                         </label>
 
-                        <input
-                            type="radio"
-                            id="source"
-                            name="search-type"
-                            checked= {searchType === 'source'}
-                            value="source"
-                            onChange={handleChange}
-                        />
-                        <label
-                            htmlFor="source"
-                        >
+                        <label>
+                            <input
+                                type="radio"
+                                value="source"
+                                {...register("searchType", {required: true})}
+                            />
+
                             Find source
                         </label>
                     </div>

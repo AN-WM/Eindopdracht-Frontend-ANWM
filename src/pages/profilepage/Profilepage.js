@@ -41,8 +41,8 @@ function Profilepage({searchtype}) {
                         {...register("username")}
                         disabled
                     />
-                    {errors.username && <p>{errors.username.message}</p>}
                 </label>
+                {errors.username && <p>{errors.username.message}</p>}
 
                 <label
                     className="profile-item"
@@ -80,8 +80,8 @@ function Profilepage({searchtype}) {
                             }
                         })}
                     />
-                    {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
                 </label>
+                {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
 
                 <label
                     className="profile-item"
@@ -95,8 +95,8 @@ function Profilepage({searchtype}) {
                             required: "E-mail is required",
                         })}
                     />
-                    {errors.email && <p>{errors.email.message}</p>}
                 </label>
+                {errors.email && <p>{errors.email.message}</p>}
 
                 <label
                     className="profile-item"

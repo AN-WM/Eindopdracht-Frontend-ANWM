@@ -1,13 +1,18 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import logo from "../../assets/Newslogo.png";
 import blankUserIcon from "../../assets/User icon.png"
 import './Header.css';
+import {AuthContext} from "../../context/AuthContext";
 
 function Header({page}) {
-    const pageType = page;
+    const {isAuth} = useContext(AuthContext);
 
     function login() {
-        console.log("We gaan inloggen!")
+        window.location.href = "/login";
+    }
+
+    function logout() {
+        console.log("We gaan uitloggen!");
     }
 
     return (
@@ -15,12 +20,12 @@ function Header({page}) {
             <div
                 className="header"
             >
-                {pageType !== 'home'
-                    ? <img src={logo} alt="App logo" className="header-logo"/>
+                {page !== 'home'
+                    ? <a href="/"><img src={logo} alt="App logo" className="header-logo"/></a>
                     : <p></p>}
 
                 <div className="right-container">
-                    {pageType !== 'registration' && pageType !== 'login'
+                    {page !== 'registration' && page !== 'login'
                         ? <img
                             src={blankUserIcon}
                             alt="logged out usericon"
@@ -28,14 +33,26 @@ function Header({page}) {
                             onClick={login}
                         />
                         : <p></p>}
-                    {pageType !== 'registration' && pageType !== 'login'
-                        ? <button
-                            type="button"
-                            className="login-button"
-                            onClick={login}
-                        >
-                            Login
-                        </button>
+
+                    {/*Don't show the button on registration and login page*/}
+                    {page !== 'registration' && page !== 'login'
+                        // If the user is not logged in, show a login button
+                        ? isAuth === false
+                            ? <button
+                                type="button"
+                                className="login-button"
+                                onClick={login}
+                            >
+                                Login
+                            </button>
+                            //If the user is logged in, show a logout button
+                            : <button
+                                type="button"
+                                className="login-button"
+                                onClick={logout}
+                            >
+                                Log out
+                            </button>
                         : <p></p>}
                 </div>
             </div>

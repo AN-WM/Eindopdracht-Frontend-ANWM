@@ -57,7 +57,7 @@ form {
 
 a {
     text-decoration: none;
-    font-style: italic;
+    /*font-style: italic;*/
     color: black;
 }
 

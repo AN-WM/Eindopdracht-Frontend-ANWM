@@ -3,8 +3,6 @@ function CreateList(input, type) {
     let sourceList = new Set();
     let authorReturnList = [];
     let sourceReturnList = [];
-    // let authorList = [];
-    // let sourceList = [];
 
     function AddAuthor(item) {
         item !== null && authorList.add(item);

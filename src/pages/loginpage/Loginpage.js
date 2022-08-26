@@ -5,7 +5,7 @@ import Header from "../../components/header/Header";
 import logo from "../../assets/Newslogo.png";
 import "./Loginpage.css";
 
-function Loginpage(searchtype) {
+function Loginpage() {
     const {handleSubmit, formState: {errors}, register} = useForm();
 
     function onFormSubmit(data) {
@@ -18,9 +18,7 @@ function Loginpage(searchtype) {
                 page='login'
             />
 
-            <Searchbar
-                inputType={searchtype}
-            />
+            <Searchbar/>
 
             <img src={logo} alt="App logo" className="large-logo"/>
 

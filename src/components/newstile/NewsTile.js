@@ -7,14 +7,16 @@ import dateNotation from "../../helpers/dateNotation";
 function NewsTile({article, error, toggleError}) {
     const cutOff = article.title.lastIndexOf(" - ");
     let cleanTitle = (cutOff >= 0) ? article.title.substring(0, cutOff - 1) : article.title;
-    let newsImage = (article.urlToImage === null) ? logo : article.urlToImage;
 
     return (
-        <div
+        <a
+            href={article.url}
             className="news-tile"
+            target="_blank"
+            rel="noreferrer"
         >
-            {/*Indien er geen afbeeldingslink meegegeven is, een standaard afbeelding gebruiken*/}
-            {article.urlToImage ? <img src={newsImage} alt={article.title} className="tile-image"/> :
+            {/*Use standard image when no news image is provided*/}
+            {article.urlToImage ? <img src={article.urlToImage} alt={article.title} className="tile-image"/> :
                 <img src={logo} alt="App logo" className="tile-image"/>}
 
             <article className="tile-text">
@@ -28,11 +30,10 @@ function NewsTile({article, error, toggleError}) {
                 </div>
                 <div id="tile-description">
                     <p>{clipText(article.description, 125)}</p>
-                    {/*<p>{article.description}</p>*/}
                 </div>
                 <p id="tile-source">{article.source.name}</p>
             </article>
-        </div>
+        </a>
     );
 }
 

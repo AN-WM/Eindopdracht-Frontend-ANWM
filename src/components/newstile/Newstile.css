@@ -13,7 +13,7 @@
 .tile-image {
     width: var(--tile-width);
     max-height: 113px;
-    object-fit: fill;
+    object-fit: cover;
 }
 
 .tile-text {

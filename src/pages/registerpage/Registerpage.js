@@ -5,7 +5,7 @@ import Searchbar from "../../components/searchbar/Searchbar";
 import logo from "../../assets/Newslogo.png";
 import "./Registerpage.css";
 
-function Registerpage({searchtype}) {
+function Registerpage() {
     const {handleSubmit, formState: {errors}, register, watch} = useForm();
 
     function onFormSubmit(data) {
@@ -18,9 +18,7 @@ function Registerpage({searchtype}) {
                 page='login'
             />
 
-            <Searchbar
-                inputType={searchtype}
-            />
+            <Searchbar/>
 
             <img src={logo} alt="App logo" className="large-logo"/>
 

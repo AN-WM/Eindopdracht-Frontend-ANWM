@@ -6,11 +6,10 @@ import {
 } from 'react-router-dom';
 import Homepage from "./pages/homepage/Homepage.js"
 import Searchpage from "./pages/searchpage/Searchpage.js"
-import Articlepage from "./pages/articlepage/Articlepage.js"
 import Loginpage from "./pages/loginpage/Loginpage.js"
 import Profilepage from "./pages/profilepage/Profilepage.js"
-import './App.css';
 import Registerpage from "./pages/registerpage/Registerpage";
+import './App.css';
 
 function App() {
 
@@ -41,7 +40,6 @@ function App() {
                                 element={
                                     <Searchpage
                                         searchkey="test"
-                                        searchtype="article"
                                         country="nl"
                                         apikey={apiKey}
                                     />
@@ -49,35 +47,23 @@ function App() {
                             />
 
                             <Route
-                                path="/:article-id"
-                                element={<Articlepage/>}
-                            />
-
-                            <Route
                                 path="/login"
                                 element={
-                                    <Loginpage
-                                        searchtype="article"
-
-                                    />
+                                    <Loginpage/>
                                 }
                             />
 
                             <Route
                                 path="/register"
                                 element={
-                                    <Registerpage
-                                        searchtype="article"
-                                    />
+                                    <Registerpage/>
                                 }
                             />
 
                             <Route
                                 path="/profile"
                                 element={
-                                    <Profilepage
-                                        searchtype="article"
-                                    />
+                                    <Profilepage/>
                                 }
                             />
                         </Routes>

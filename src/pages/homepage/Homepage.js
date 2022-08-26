@@ -33,9 +33,7 @@ function Homepage({country, apikey}) {
                 page='home'
             />
             <img src={logo} alt="App logo" className="large-logo"/>
-            <Searchbar
-                inputType='article'
-            />
+            <Searchbar/>
             {error &&
                 <span>
                     Oeps, er ging iets mis!

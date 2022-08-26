@@ -1,11 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import FilterBlock from "../filterblock/FilterBlock";
 import './FilterBar.css'
 import createList from "../../helpers/createList";
+import {SearchContext} from "../../context/SearchContext";
 
-function FilterBar({searchType, input}) {
+function FilterBar({input}) {
     const [authorList, setAuthorList] = useState();
     const [sourceList, setSourceList] = useState();
+    const {searchValue: {searchType}} = useContext(SearchContext);
 
     useEffect(() => {
             if (input !== undefined) {
