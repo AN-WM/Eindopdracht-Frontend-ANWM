@@ -3,72 +3,36 @@ import Searchbar from "../../components/searchbar/Searchbar";
 import NewsTile from "../../components/newstile/NewsTile";
 import Header from "../../components/header/Header";
 import FilterBar from "../../components/filterbar/FilterBar";
-import axios from "axios";
+import fetchSourceList from "../../helpers/fetchSourceList";
 import './Searchpage.css';
 import {SearchContext} from "../../context/SearchContext";
+import FetchArticleData from "../../helpers/FetchArticleData";
+import FetchSourceData from "../../helpers/FetchSourceData";
+import createSourceString from "../../helpers/createSourceString";
 
 function Searchpage({apikey}) {
     const [error, toggleError] = useState(false);
-    const [newslist, setNewslist] = useState();
-    const [sourceList, setSourceList] = useState();
+    const [newslist, setNewslist] = useState([]);
+    const [sourceList, setSourceList] = useState([]);
     const {searchValue: {searchTerm, searchType}} = useContext(SearchContext);
-    const [sourceArray, setSourceArray] = useState();
-    const [sourceString, setSourceString] = useState();
+    const [sourceArray, setSourceArray] = useState([]);
+    const [sourceString, setSourceString] = useState('');
 
     useEffect(() => {
-            toggleError(false);
+        toggleError(false);
 
-            async function fetchSourceList() {
-                try {
-                    const result = await axios.get(`https://newsapi.org/v2/top-headlines/sources?apiKey=${apikey}`);
-                    console.log(result);
-                    setSourceList(
-                        result.data.sources.filter((source) => {
-                            return source.name.toLowerCase().includes(searchTerm.toLowerCase());
-                        })
-                    );
-                } catch (e) {
-                    console.error(e);
-                    toggleError(true);
-                }
-            }
+        //Fetch list of all sources available, filtered to contain only unique items
+        fetchSourceList(searchTerm, apikey, sourceList, setSourceList, toggleError);
 
-            async function fetchData() {
-                if (searchType === 'article') {
-                    try {
-                        const result = await axios.get(`https://newsapi.org/v2/everything?q=${searchTerm}&apiKey=${apikey}`);
-                        setNewslist(result.data.articles);
-                    } catch (e) {
-                        console.error(e);
-                        toggleError(true);
-                    }
-                } else if (searchType === 'source') {
-                    try {
-                        console.log(sourceString);
-                        const result = await axios.get(`https://newsapi.org/v2/everything?sources=${sourceString}&apiKey=${apikey}`);
-                        setNewslist(result.data.articles);
-                    } catch (e) {
-                        console.error(e);
-                        toggleError(true);
-                    }
-                }
-            }
+        //Transform sourceList array into a string
+        createSourceString(searchType, sourceList, setSourceArray, sourceArray, setSourceString);
 
-            if (searchType === 'source') {
-                fetchSourceList();
-                if (sourceList !== undefined) {
-                    setSourceArray(sourceList.map(source => source.id));
-                    if (sourceArray !== undefined) {
-                        setSourceString(sourceArray.toString());
-                    }
+        //Fetch articles, either based on searchTerm or sourceString.
+        FetchArticleData(searchType, searchTerm, apikey, setNewslist, toggleError);
+        FetchSourceData(searchType, sourceString, apikey, setNewslist, toggleError);
 
-                }
-            }
-
-            fetchData();
-            // eslint-disable-next-line react-hooks/exhaustive-deps
-        }, [searchTerm, searchType, apikey]
-    )
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [searchTerm, searchType, apikey])
 
     return (
         <>
