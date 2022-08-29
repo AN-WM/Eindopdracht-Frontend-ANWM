@@ -9,6 +9,7 @@ import {SearchContext} from "../../context/SearchContext";
 import FetchArticleData from "../../helpers/FetchArticleData";
 import FetchSourceData from "../../helpers/FetchSourceData";
 import createSourceString from "../../helpers/createSourceString";
+import createSourceArray from "../../helpers/createSourceArray";
 
 function Searchpage({apikey}) {
     const [error, toggleError] = useState(false);
@@ -22,10 +23,18 @@ function Searchpage({apikey}) {
         toggleError(false);
         async function loadData () {
             try {
+                //Load an array of unique available sources, including the searchTerm
                 const sources = await fetchSourceList(searchTerm, apikey, sourceList, setSourceList, toggleError);
-                setSourceString(createSourceString(searchType, sources, setSourceArray, sourceArray, setSourceString));
+                //Create a list of only the id's in the previous array
+                setSourceArray(createSourceArray(searchType, sources));
+                //Convert the sourceArray to a string
+                setSourceString(sourceArray.toString());
+                //Fetch the articles, based on their source
                 const articlesBySource = await FetchSourceData(searchType, sourceString, apikey, setNewslist, toggleError);
+                //Fetch the articles, based on the searchTerm
                 const articlesbyArticle = await FetchArticleData(searchType, searchTerm, apikey, setNewslist, toggleError);
+
+                //Fill the newslist, based on searchType, with the matching list of articles
                 if (searchType === 'article') {
                     setNewslist(articlesbyArticle);
                 }

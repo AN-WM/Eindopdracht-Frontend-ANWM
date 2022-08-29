@@ -5,7 +5,7 @@ async function FetchArticleData(searchType, searchTerm, apikey, setNewslist, tog
     try {
         const result = await axios.get(`https://newsapi.org/v2/everything?q=${searchTerm}&apiKey=${apikey}`);
         if (searchType === 'article') {
-            setNewslist(result.data.articles);
+            return result.data.articles;
         }
     } catch (e) {
         console.error(e);
