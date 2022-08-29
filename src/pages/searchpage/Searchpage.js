@@ -20,16 +20,28 @@ function Searchpage({apikey}) {
 
     useEffect(() => {
         toggleError(false);
+        async function loadData () {
+            try {
+                const sources = await fetchSourceList(searchTerm, apikey, sourceList, setSourceList, toggleError);
+                setSourceString(createSourceString(searchType, sources, setSourceArray, sourceArray, setSourceString));
+                const articlesBySource = await FetchSourceData(searchType, sourceString, apikey, setNewslist, toggleError);
+                const articlesbyArticle = await FetchArticleData(searchType, searchTerm, apikey, setNewslist, toggleError);
+                if (searchType === 'article') {
+                    setNewslist(articlesbyArticle);
+                }
+                else if (searchType === 'source') {
+                    setNewslist(articlesBySource);
+                }
+                else {
+                    console.log("Nou gaat er iets op zijn kop verkeerd, er is geen searchType")
+                }
+            }
+            catch (e) {
+                console.error(e);
+            }
+        }
 
-        //Fetch list of all sources available, filtered to contain only unique items
-        fetchSourceList(searchType, searchTerm, apikey, sourceList, setSourceList, sourceArray, setSourceArray, sourceString, setSourceString, setNewslist, toggleError);
-
-        //Transform sourceList array into a string
-        // createSourceString(searchType, sourceList, setSourceArray, sourceArray, setSourceString);
-
-        //Fetch articles, either based on searchTerm or sourceString.
-        FetchArticleData(searchType, searchTerm, apikey, setNewslist, toggleError);
-        // FetchSourceData(searchType, sourceString, apikey, setNewslist, toggleError);
+        loadData()
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchTerm, searchType, apikey])
