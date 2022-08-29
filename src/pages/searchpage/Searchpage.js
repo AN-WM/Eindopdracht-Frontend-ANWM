@@ -22,14 +22,14 @@ function Searchpage({apikey}) {
         toggleError(false);
 
         //Fetch list of all sources available, filtered to contain only unique items
-        fetchSourceList(searchTerm, apikey, sourceList, setSourceList, toggleError);
+        fetchSourceList(searchType, searchTerm, apikey, sourceList, setSourceList, sourceArray, setSourceArray, sourceString, setSourceString, setNewslist, toggleError);
 
         //Transform sourceList array into a string
-        createSourceString(searchType, sourceList, setSourceArray, sourceArray, setSourceString);
+        // createSourceString(searchType, sourceList, setSourceArray, sourceArray, setSourceString);
 
         //Fetch articles, either based on searchTerm or sourceString.
         FetchArticleData(searchType, searchTerm, apikey, setNewslist, toggleError);
-        FetchSourceData(searchType, sourceString, apikey, setNewslist, toggleError);
+        // FetchSourceData(searchType, sourceString, apikey, setNewslist, toggleError);
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchTerm, searchType, apikey])

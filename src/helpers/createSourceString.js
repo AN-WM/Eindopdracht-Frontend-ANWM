@@ -1,4 +1,7 @@
-function createSourceString(searchType, sourceList, setSourceArray, sourceArray, setSourceString) {
+import FetchSourceData from "./FetchSourceData";
+
+function createSourceString(searchType, sourceList, setSourceArray, sourceArray, setSourceString, sourceString, apikey, setNewslist, toggleError) {
+
     if (searchType === 'source') {
         console.log(sourceList);
         if (sourceList.length >= 0) {
@@ -8,6 +11,7 @@ function createSourceString(searchType, sourceList, setSourceArray, sourceArray,
                 console.log(sourceArray);
                 //Convert to string
                 setSourceString(sourceArray.toString());
+                FetchSourceData(searchType, sourceString, apikey, setNewslist, toggleError);
             }
         } else {
             console.log("Er ging iets mis met de sourceString")
