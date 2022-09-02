@@ -5,8 +5,8 @@ import createList from "../../helpers/createList";
 import {SearchContext} from "../../context/SearchContext";
 
 function FilterBar({input}) {
-    const [authorList, setAuthorList] = useState();
-    const [sourceList, setSourceList] = useState();
+    const [authorList, setAuthorList] = useState([]);
+    const [sourceList, setSourceList] = useState([]);
     const {searchValue: {searchType}} = useContext(SearchContext);
 
     useEffect(() => {

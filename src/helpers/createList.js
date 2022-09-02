@@ -14,7 +14,7 @@ function CreateList(input, type) {
 
     //Create list of unique authors
     if (type === 'author') {
-        input.map((input) => {
+        input.forEach((input) => {
             AddAuthor(input.author);
         });
 
@@ -24,7 +24,7 @@ function CreateList(input, type) {
 
     //Create list of unique sources
     } else if (type === 'source') {
-        input.map((input) => {
+        input.forEach((input) => {
             AddSource(input.source.name);
         });
         sourceReturnList = Array.from(sourceList);

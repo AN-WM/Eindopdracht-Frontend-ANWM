@@ -4,11 +4,13 @@ async function FetchArticleData(searchType, searchTerm, apikey, setNewslist, tog
 
     try {
         const result = await axios.get(`https://newsapi.org/v2/everything?q=${searchTerm}&apiKey=${apikey}`);
+        toggleError(false);
         if (searchType === 'article') {
+            console.log("de artikelen worden klaargezet");
             return result.data.articles;
         }
     } catch (e) {
-        console.error(e);
+        console.log(e);
         toggleError(true);
     }
 }

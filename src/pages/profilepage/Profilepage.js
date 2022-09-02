@@ -22,7 +22,7 @@ function Profilepage({searchtype}) {
                 inputType={searchtype}
             />
 
-            <img src={profilepic} alt="Profile picture" className="profile-picture"/>
+            <img src={profilepic} alt="Profile pic" className="profile-picture"/>
 
             <h1>Profile</h1>
 

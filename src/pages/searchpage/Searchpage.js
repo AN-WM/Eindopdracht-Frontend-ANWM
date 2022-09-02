@@ -8,7 +8,6 @@ import './Searchpage.css';
 import {SearchContext} from "../../context/SearchContext";
 import FetchArticleData from "../../helpers/FetchArticleData";
 import FetchSourceData from "../../helpers/FetchSourceData";
-import createSourceString from "../../helpers/createSourceString";
 import createSourceArray from "../../helpers/createSourceArray";
 
 function Searchpage({apikey}) {
@@ -22,13 +21,15 @@ function Searchpage({apikey}) {
     useEffect(() => {
         toggleError(false);
         async function loadData () {
+            console.log(searchType);
             try {
                 //Load an array of unique available sources, including the searchTerm
                 const sources = await fetchSourceList(searchTerm, apikey, sourceList, setSourceList, toggleError);
                 //Create a list of only the id's in the previous array
                 setSourceArray(createSourceArray(searchType, sources));
+                if (sourceArray !== undefined) {
                 //Convert the sourceArray to a string
-                setSourceString(sourceArray.toString());
+                setSourceString(sourceArray.toString());}
                 //Fetch the articles, based on their source
                 const articlesBySource = await FetchSourceData(searchType, sourceString, apikey, setNewslist, toggleError);
                 //Fetch the articles, based on the searchTerm

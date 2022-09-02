@@ -3,12 +3,12 @@ async function fetchSourceList(searchTerm, apikey, sourceList, setSourceList, to
 
     try {
         const result = await axios.get(`https://newsapi.org/v2/top-headlines/sources?apiKey=${apikey}`);
-        console.log(result.data.sources);
+        toggleError(false);
         return (result.data.sources.filter((source) => {
                         return source.name.toLowerCase().includes(searchTerm.toLowerCase());
                     }));
     } catch (e) {
-        console.error(e);
+        console.log(e);
         toggleError(true);
     }
 

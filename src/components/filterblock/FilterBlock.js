@@ -1,5 +1,7 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import './FilterBlock.css';
+import {SearchContext} from "../../context/SearchContext";
+
 
 let languageArray = [{
     language: "ar",
@@ -45,10 +47,18 @@ let languageArray = [{
 
 let briefLanguageArray = languageArray.slice(0, 5);
 
+
 function CreateBlock(blockType, inputList) {
     const [languageBrief, toggleLanguageBrief] = useState(false);
     const [authorBrief, toggleAuthorBrief] = useState(false);
     const [sourceBrief, toggleSourceBrief] = useState(false);
+    const {searchValue: {language}, submitSearchValue} = useContext(SearchContext);
+
+    function checkBox(value) {
+        let checkedString = language + value;
+        console.log(checkedString);
+    }
+
 
     switch (blockType) {
         case 'date':
@@ -149,6 +159,7 @@ function CreateBlock(blockType, inputList) {
                                     id={input.language}
                                     name={input.language}
                                     value={input.language}
+                                    key={input.language}
                                 />
                                 <label
                                     htmlFor={input.language}
@@ -233,8 +244,12 @@ function CreateBlock(blockType, inputList) {
                             {inputList.map((input) => {
                                 return (
                                     <div className="select-option">
-                                        <input type="checkbox" id={input} name={input}
-                                               value={input}/>
+                                        <input
+                                            type="checkbox"
+                                            id={input}
+                                            name={input}
+                                            value={input}
+                                        />
                                         <label htmlFor={input}>{input}</label>
                                     </div>
                                 )
