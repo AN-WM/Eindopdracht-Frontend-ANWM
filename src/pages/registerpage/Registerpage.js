@@ -1,15 +1,38 @@
-import React from 'react';
+import React, {useState, useContext} from 'react';
 import {useForm} from "react-hook-form";
 import Header from "../../components/header/Header";
 import Searchbar from "../../components/searchbar/Searchbar";
 import logo from "../../assets/Newslogo.png";
 import "./Registerpage.css";
+import axios from "axios";
+import {AuthContext} from "../../context/AuthContext";
 
 function Registerpage() {
+    const {signInFunction} = useContext(AuthContext);
     const {handleSubmit, formState: {errors}, register, watch} = useForm();
+    const [error, toggleError] = useState(false);
+
+    async function registerUser(data) {
+        try {
+            const {status} = await axios.post(`https://frontend-educational-backend.herokuapp.com/api/auth/signup`, {
+                    "username": data.username,
+                    "email": data.email,
+                    "password": data.password,
+                    "role": ["user"]
+                }
+            );
+            toggleError(false);
+            console.log(status);
+            status === 200 && signInFunction(data.username, data.password);
+        } catch (e) {
+            console.log(e);
+            toggleError(true);
+        }
+    }
+
 
     function onFormSubmit(data) {
-        console.log(data);
+        registerUser(data);
     }
 
     return (
