@@ -5,13 +5,13 @@ import './Header.css';
 import {AuthContext} from "../../context/AuthContext";
 
 function Header({page}) {
-    const {isAuth} = useContext(AuthContext);
+    const {authState: {isAuth}} = useContext(AuthContext);
 
-    function login() {
+    function loadSignInPage() {
         window.location.href = "/login";
     }
 
-    function logout() {
+    function signOut() {
         console.log("We gaan uitloggen!");
     }
 
@@ -30,7 +30,7 @@ function Header({page}) {
                             src={blankUserIcon}
                             alt="logged out usericon"
                             className="user-icon"
-                            onClick={login}
+                            onClick={loadSignInPage}
                         />
                         : <p></p>}
 
@@ -41,7 +41,7 @@ function Header({page}) {
                             ? <button
                                 type="button"
                                 className="login-button"
-                                onClick={login}
+                                onClick={loadSignInPage}
                             >
                                 Login
                             </button>
@@ -49,7 +49,7 @@ function Header({page}) {
                             : <button
                                 type="button"
                                 className="login-button"
-                                onClick={logout}
+                                onClick={signOut}
                             >
                                 Log out
                             </button>

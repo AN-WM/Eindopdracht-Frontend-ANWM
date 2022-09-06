@@ -1,15 +1,18 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {useForm} from 'react-hook-form';
 import Searchbar from "../../components/searchbar/Searchbar";
 import Header from "../../components/header/Header";
 import logo from "../../assets/Newslogo.png";
 import "./Loginpage.css";
+import {AuthContext} from "../../context/AuthContext";
 
 function Loginpage() {
     const {handleSubmit, formState: {errors}, register} = useForm();
+    const {signInFunction} = useContext(AuthContext);
 
     function onFormSubmit(data) {
-        console.log(data);
+        signInFunction(data.username, data.password);
+        console.log()
     }
 
     return (
