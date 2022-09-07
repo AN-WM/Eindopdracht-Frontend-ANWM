@@ -6,11 +6,18 @@ import logo from "../../assets/Newslogo.png";
 import "./Registerpage.css";
 import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
+import {useNavigate} from "react-router-dom";
 
 function Registerpage() {
     const {signInFunction} = useContext(AuthContext);
     const {handleSubmit, formState: {errors}, register, watch} = useForm();
     const [error, toggleError] = useState(false);
+    const navigate = useNavigate();
+
+    function confirmRegistration(data) {
+        signInFunction(data.username, data.password);
+        navigate('/profile')
+    }
 
     async function registerUser(data) {
         try {
@@ -23,7 +30,7 @@ function Registerpage() {
             );
             toggleError(false);
             console.log(status);
-            status === 200 && signInFunction(data.username, data.password);
+            status === 200 && confirmRegistration(data);
         } catch (e) {
             console.log(e);
             toggleError(true);

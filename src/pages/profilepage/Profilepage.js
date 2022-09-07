@@ -1,20 +1,16 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import {useForm} from "react-hook-form";
 import Header from "../../components/header/Header";
 import Searchbar from "../../components/searchbar/Searchbar";
 import profilepic from "../../assets/Generic profile pic change.png";
 import "./Profilepage.css";
-import {AuthContext} from "../../context/AuthContext";
 
 function Profilepage({searchtype}) {
     const {handleSubmit, formState: {errors}, register, watch} = useForm();
-    const {authState: {user}} = useContext(AuthContext);
 
     function onFormSubmit(data) {
         console.log(data);
     }
-
-    console.log(user);
 
     return (
         <>

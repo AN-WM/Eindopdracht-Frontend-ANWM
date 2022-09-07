@@ -3,12 +3,14 @@ import logo from "../../assets/Newslogo.png";
 import blankUserIcon from "../../assets/User icon.png"
 import './Header.css';
 import {AuthContext} from "../../context/AuthContext";
+import {Link, useNavigate} from "react-router-dom";
 
 function Header({page}) {
     const {authState: {isAuth}} = useContext(AuthContext);
+    const navigate = useNavigate();
 
     function loadSignInPage() {
-        window.location.href = "/login";
+        navigate("/login");
     }
 
     function signOut() {
@@ -21,7 +23,7 @@ function Header({page}) {
                 className="header"
             >
                 {page !== 'home'
-                    ? <a href="/"><img src={logo} alt="App logo" className="header-logo"/></a>
+                    ? <Link to="/"><img src={logo} alt="App logo" className="header-logo"/></Link>
                     : <p></p>}
 
                 <div className="right-container">

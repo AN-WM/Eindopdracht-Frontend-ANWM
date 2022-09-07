@@ -5,14 +5,16 @@ import Header from "../../components/header/Header";
 import logo from "../../assets/Newslogo.png";
 import "./Loginpage.css";
 import {AuthContext} from "../../context/AuthContext";
+import {useNavigate} from "react-router-dom";
 
 function Loginpage() {
     const {handleSubmit, formState: {errors}, register} = useForm();
     const {signInFunction} = useContext(AuthContext);
+    const navigate = useNavigate();
 
     function onFormSubmit(data) {
         signInFunction(data.username, data.password);
-        console.log()
+        navigate('/profile');
     }
 
     return (

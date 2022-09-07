@@ -17,7 +17,6 @@ function AuthContextProvider({children}) {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        console.log(token);
         if (token !== "undefined") {
             fetchUser(token)
             setAuthState({
@@ -42,7 +41,6 @@ function AuthContextProvider({children}) {
                     }
                 }
             );
-            console.log(result);
             result.status === 200 && logData(result.data);
         } catch (e) {
             console.log(e);
@@ -54,14 +52,12 @@ function AuthContextProvider({children}) {
     }
 
     function logData(data) {
-        console.log(data.accessToken);
         setAuthState({
             isAuth: true,
             userName: data.username,
             userEmail: data.email,
         })
         localStorage.setItem('token', data.accessToken);
-        // window.location.href = "/profile";
     }
 
     async function signIn(username, password) {

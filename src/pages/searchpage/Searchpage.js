@@ -6,8 +6,8 @@ import FilterBar from "../../components/filterbar/FilterBar";
 import fetchSourceList from "../../helpers/fetchSourceList";
 import './Searchpage.css';
 import {SearchContext} from "../../context/SearchContext";
-import FetchArticleData from "../../helpers/FetchArticleData";
-import FetchSourceData from "../../helpers/FetchSourceData";
+import FetchArticleData from "../../helpers/fetchArticleData";
+import FetchSourceData from "../../helpers/fetchSourceData";
 import createSourceArray from "../../helpers/createSourceArray";
 
 function Searchpage({apikey}) {
