@@ -1,11 +1,10 @@
-function createSourceArray(searchType, sources) {
+function createSourceArray(searchType, sourceList) {
     if (searchType === 'source') {
-        console.log(sources);
-        if (sources.length >= 0) {
+        console.log(sourceList);
+        if (sourceList.length >= 0) {
             //Use only the ID's in the array
-            return sources.map(source => source.id);
+            return sourceList.map(source => source.id.toString());
         }
     }
 }
-
 export default createSourceArray;

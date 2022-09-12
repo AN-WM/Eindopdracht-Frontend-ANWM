@@ -1,5 +1,5 @@
 import axios from "axios";
-async function fetchSourceList(searchTerm, apikey, sourceList, setSourceList, toggleError) {
+async function fetchSourceList(searchTerm, apikey, toggleError) {
 
     try {
         const result = await axios.get(`https://newsapi.org/v2/top-headlines/sources?apiKey=${apikey}`);
