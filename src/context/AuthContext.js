@@ -17,7 +17,7 @@ function AuthContextProvider({children}) {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        if (token !== "undefined") {
+        if (token !== "undefined" && token !== null) {
             fetchUser(token)
             setAuthState({
                 status: 'done'
@@ -33,6 +33,7 @@ function AuthContextProvider({children}) {
     }, []);
 
     async function fetchUser(token) {
+        console.log(token);
         try {
             const result = await axios.get(`https://frontend-educational-backend.herokuapp.com/api/user`, {
                     headers: {
@@ -41,6 +42,8 @@ function AuthContextProvider({children}) {
                     }
                 }
             );
+            console.log("Fetch user haalt deze resultaten op");
+            console.log(result);
             result.status === 200 && logData(result.data);
         } catch (e) {
             console.log(e);
@@ -56,9 +59,11 @@ function AuthContextProvider({children}) {
             isAuth: true,
             userName: data.username,
             userEmail: data.email,
+            userCountry: data.info,
         })
         localStorage.setItem('token', data.accessToken);
     }
+
 
     async function signIn(username, password) {
         try {
@@ -73,10 +78,25 @@ function AuthContextProvider({children}) {
         }
     }
 
+    function signOut() {
+        localStorage.clear();
+        setAuthState({
+            isAuth: false,
+            user: {
+                userName: "",
+                userEmail: "",
+                userImg: "",
+                userCountry: ""
+            },
+        })
+    }
+
     const data = {
         authState,
         changeAuthFunction: changeAuth,
-        signInFunction: signIn
+        signInFunction: signIn,
+        signOutFunction: signOut,
+        fetchUserFunction: fetchUser
     }
 
     return (

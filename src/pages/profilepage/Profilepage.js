@@ -1,15 +1,36 @@
-import React from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {useForm} from "react-hook-form";
 import Header from "../../components/header/Header";
 import Searchbar from "../../components/searchbar/Searchbar";
 import profilepic from "../../assets/Generic profile pic change.png";
 import "./Profilepage.css";
+import {AuthContext} from "../../context/AuthContext";
+import updatePassword from "../../helpers/updatePassword";
+import updateEmail from "../../helpers/updateEmail";
+import updateCountry from "../../helpers/updateCountry";
 
 function Profilepage({searchtype}) {
+    const [error, toggleError] = useState(false);
+    const {authState: {userName, userEmail, userCountry, userImage}, fetchUserFunction} = useContext(AuthContext);
     const {handleSubmit, formState: {errors}, register, watch} = useForm();
+    const token = localStorage.getItem('token');
 
-    function onFormSubmit(data) {
-        console.log(data);
+    async function onFormSubmit(data) {
+        //Update password, if new password has been entered
+        if (data.password !== undefined && data.password !== "") {
+            const passwordResponse = await updatePassword(data, toggleError, token);
+            passwordResponse === 200 && fetchUserFunction(token);
+        }
+        //Update email, if new email has been entered
+        if (data.email !== undefined && data.email !== "") {
+            const emailResponse = await updateEmail(data.email, toggleError, token);
+            emailResponse === 200 && fetchUserFunction(token);
+        }
+        //Update country, if new country has been entered
+        if (data.country !== undefined && data.country !== "") {
+            const countryResponse = await updateCountry(data.country, toggleError, token);
+            countryResponse === 200 && fetchUserFunction(token);
+        }
     }
 
     return (
@@ -26,6 +47,10 @@ function Profilepage({searchtype}) {
 
             <h1>Profile</h1>
 
+            {error &&
+                <p>Unable to fetch profile data</p>
+            }
+
             <form
                 className="profile-form"
                 onSubmit={handleSubmit(onFormSubmit)}
@@ -37,8 +62,8 @@ function Profilepage({searchtype}) {
                     <input
                         type="text"
                         className="input-bar login-detail"
-                        placeholder="Username"
-                        {...register("username")}
+                        placeholder={userName}
+                        {...register("username", ) }
                         disabled
                     />
                 </label>
@@ -53,7 +78,6 @@ function Profilepage({searchtype}) {
                         className="input-bar login-detail"
                         placeholder="********"
                         {...register("password", {
-                            required: "Password is required",
                             minLength: {
                                 value: 6,
                                 message: "Password should have at least 6 characters"
@@ -72,7 +96,6 @@ function Profilepage({searchtype}) {
                         className="input-bar login-detail"
                         placeholder="********"
                         {...register("confirmPassword", {
-                            required: "Confirmed password is required",
                             validate: (value: string) => {
                                 if (watch('password') !== value) {
                                     return "Your passwords do not match";
@@ -90,9 +113,8 @@ function Profilepage({searchtype}) {
                     <input
                         type="email"
                         className="input-bar login-detail"
-                        placeholder="Enter e-mail address"
+                        placeholder={userEmail}
                         {...register("email", {
-                            required: "E-mail is required",
                         })}
                     />
                 </label>
@@ -104,7 +126,7 @@ function Profilepage({searchtype}) {
                     Home Country
                     <select
                         className="input-bar login-detail"
-                        {...register("country")}
+                        {...register("country", {value: userCountry})}
                     >
                         <option value="">Select</option>
                         <option value="ar">Argentina</option>
