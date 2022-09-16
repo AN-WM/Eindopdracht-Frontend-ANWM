@@ -1,5 +1,7 @@
 .search-page-container {
     display: flex;
+    width: 1400px;
+    justify-content: flex-start;
 }
 
 .search-list {
@@ -8,7 +10,8 @@
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    max-width: 1200px;
+    width: 1200px;
     flex-grow: 0;
     flex-shrink: 1;
 }
+

@@ -4,7 +4,7 @@ export const SearchContext = createContext({});
 
 function SearchContextProvider({children}) {
     const [searchValue, setSearchValue] = useState({
-        searchTerm: 'Test',
+        searchTerm: '',
         searchType: 'article',
         startDate: '',
         endDate: '',

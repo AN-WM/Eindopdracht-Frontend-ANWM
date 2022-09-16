@@ -22,6 +22,7 @@ function Searchpage({apikey}) {
             try {
                 //Fill the newsList, based on searchType, with the matching list of articles
                 if (searchType === 'article') {
+
                     //Fetch the articles, based on the searchTerm
                     const articlesByArticle = await FetchArticleData(searchType, searchTerm, apikey, setNewsList, toggleError);
 
@@ -61,20 +62,20 @@ function Searchpage({apikey}) {
 
             <Searchbar/>
 
-            {error &&
-                <span>
-                    Oeps, er ging iets mis!
-                </span>
-            }
-
             <div className="search-page-container">
                 <FilterBar
                     input={newsList}
                 />
 
                 <div className="search-list">
-                    {newsList &&
-                        newsList.map((input) => {
+                    {error &&
+                        <p className="search-error">
+                            Something went wrong. Please try another search term.
+                        </p>
+                    }
+
+                    {newslist &&
+                        newslist.map((input) => {
                             return (
                                 <NewsTile
                                     article={input}
