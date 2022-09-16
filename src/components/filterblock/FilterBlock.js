@@ -47,7 +47,6 @@ let languageArray = [{
 
 let briefLanguageArray = languageArray.slice(0, 5);
 
-
 function CreateBlock(blockType, inputList) {
     const [languageBrief, toggleLanguageBrief] = useState(false);
     const [authorBrief, toggleAuthorBrief] = useState(false);
@@ -58,7 +57,6 @@ function CreateBlock(blockType, inputList) {
         let checkedString = language + value;
         console.log(checkedString);
     }
-
 
     switch (blockType) {
         case 'date':
@@ -91,10 +89,12 @@ function CreateBlock(blockType, inputList) {
                         //Basic source list, with button to show more
                         <div className="filter-block">
                             <h3>Source</h3>
-
                             {briefList.map((input) => {
                                 return (
-                                    <div className="select-option">
+                                    <div
+                                        className="select-option"
+                                        key={input}
+                                    >
                                         <input
                                             type="checkbox"
                                             id={input}
@@ -125,10 +125,22 @@ function CreateBlock(blockType, inputList) {
 
                             {inputList.map((input) => {
                                 return (
-                                    <div className="select-option">
-                                        <input type="checkbox" id={input} name={input}
-                                               value={input}/>
-                                        <label htmlFor={input}>{input}</label>
+                                    <div
+                                        className="select-option"
+                                        key={input}
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            id={input}
+                                            name={input}
+                                            value={input}
+                                        />
+
+                                        <label
+                                            htmlFor={input}
+                                        >
+                                            {input}
+                                        </label>
                                     </div>
                                 )
                             })}
@@ -153,13 +165,15 @@ function CreateBlock(blockType, inputList) {
 
                     {briefLanguageArray.map((input) => {
                         return (
-                            <div className="select-option">
+                            <div
+                                className="select-option"
+                                key={input.language}
+                            >
                                 <input
                                     type="checkbox"
                                     id={input.language}
                                     name={input.language}
                                     value={input.language}
-                                    key={input.language}
                                 />
                                 <label
                                     htmlFor={input.language}
@@ -185,10 +199,21 @@ function CreateBlock(blockType, inputList) {
 
                     {languageArray.map((input) => {
                         return (
-                            <div className="select-option">
-                                <input type="checkbox" id={input.language} name={input.language}
-                                       value={input.language}/>
-                                <label htmlFor={input.language}>{input.full}</label>
+                            <div
+                                className="select-option"
+                                key={input.language}
+                            >
+                                <input
+                                    type="checkbox"
+                                    id={input.language}
+                                    name={input.language}
+                                    value={input.language}
+
+                                />
+
+                                <label htmlFor={input.language}>
+                                    {input.full}
+                                </label>
                             </div>
                         )
                     })}
@@ -212,12 +237,16 @@ function CreateBlock(blockType, inputList) {
 
                             {briefList.map((input) => {
                                 return (
-                                    <div className="select-option">
+                                    <div
+                                        className="select-option"
+                                        key={input}
+                                    >
                                         <input
                                             type="checkbox"
                                             id={input}
                                             name={input}
                                             value={input}
+
                                         />
                                         <label
                                             htmlFor={input}
@@ -238,19 +267,29 @@ function CreateBlock(blockType, inputList) {
                         </div>
                         :
                         //Full author list, with button to show less
-                        <div className="filter-block">
+                        <div
+                            className="filter-block"
+                        >
                             <h3>Author</h3>
 
                             {inputList.map((input) => {
                                 return (
-                                    <div className="select-option">
+                                    <div
+                                        className="select-option"
+                                        key={input}
+                                    >
                                         <input
                                             type="checkbox"
                                             id={input}
                                             name={input}
                                             value={input}
+
                                         />
-                                        <label htmlFor={input}>{input}</label>
+                                        <label
+                                            htmlFor={input}
+                                        >
+                                            {input}
+                                        </label>
                                     </div>
                                 )
                             })}

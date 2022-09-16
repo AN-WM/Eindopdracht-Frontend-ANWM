@@ -6,44 +6,43 @@ import FilterBar from "../../components/filterbar/FilterBar";
 import fetchSourceList from "../../helpers/fetchSourceList";
 import './Searchpage.css';
 import {SearchContext} from "../../context/SearchContext";
-import FetchArticleData from "../../helpers/FetchArticleData";
-import FetchSourceData from "../../helpers/FetchSourceData";
+import FetchArticleData from "../../helpers/fetchArticleData";
+import FetchSourceData from "../../helpers/fetchSourceData";
 import createSourceArray from "../../helpers/createSourceArray";
 
 function Searchpage({apikey}) {
     const [error, toggleError] = useState(false);
-    const [newslist, setNewslist] = useState([]);
-    const [sourceList, setSourceList] = useState([]);
+    const [newsList, setNewsList] = useState([]);
     const {searchValue: {searchTerm, searchType}} = useContext(SearchContext);
-    const [sourceArray, setSourceArray] = useState([]);
-    const [sourceString, setSourceString] = useState('');
 
     useEffect(() => {
         toggleError(false);
 
         async function loadData() {
-            console.log(searchType);
             try {
-                //Load an array of unique available sources, including the searchTerm
-                const sources = await fetchSourceList(searchTerm, apikey, sourceList, setSourceList, toggleError);
-                //Create a list of only the id's in the previous array
-                setSourceArray(createSourceArray(searchType, sources));
-                if (sourceArray !== undefined) {
-                    //Convert the sourceArray to a string
-                    setSourceString(sourceArray.toString());
-                }
-                //Fetch the articles, based on their source
-                const articlesBySource = await FetchSourceData(searchType, sourceString, apikey, setNewslist, toggleError);
-                //Fetch the articles, based on the searchTerm
-                const articlesbyArticle = await FetchArticleData(searchType, searchTerm, apikey, setNewslist, toggleError);
-
-                //Fill the newslist, based on searchType, with the matching list of articles
+                //Fill the newsList, based on searchType, with the matching list of articles
                 if (searchType === 'article') {
-                    setNewslist(articlesbyArticle);
+
+                    //Fetch the articles, based on the searchTerm
+                    const articlesByArticle = await FetchArticleData(searchType, searchTerm, apikey, setNewsList, toggleError);
+
+                    //Fill the newsList
+                    setNewsList(articlesByArticle);
                 } else if (searchType === 'source') {
-                    setNewslist(articlesBySource);
+                    //Load an array of unique available sources, including the searchTerm
+                    const sourceList = await fetchSourceList(searchTerm, apikey, toggleError);
+
+                    //Create a list of only the id's in the previous array and merge into one string
+                    const sourceString = createSourceArray(searchType, sourceList).toString();
+
+                    //Fetch the articles, based on their source
+                    const articlesBySource = await FetchSourceData(searchType, sourceString, apikey, toggleError);
+
+                    //Fill the newsList
+                    setNewsList(articlesBySource);
                 } else {
-                    console.log("Nou gaat er iets op zijn kop verkeerd, er is geen searchType")
+                    console.log("Error: unknown searchtype");
+                    toggleError(true);
                 }
             } catch (e) {
                 console.error(e);
@@ -51,9 +50,9 @@ function Searchpage({apikey}) {
         }
 
         loadData()
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchTerm, searchType, apikey])
+
 
     return (
         <>
@@ -65,7 +64,7 @@ function Searchpage({apikey}) {
 
             <div className="search-page-container">
                 <FilterBar
-                    input={newslist}
+                    input={newsList}
                 />
 
                 <div className="search-list">
