@@ -20,7 +20,8 @@ function Searchpage({apikey}) {
 
     useEffect(() => {
         toggleError(false);
-        async function loadData () {
+
+        async function loadData() {
             console.log(searchType);
             try {
                 //Load an array of unique available sources, including the searchTerm
@@ -28,8 +29,9 @@ function Searchpage({apikey}) {
                 //Create a list of only the id's in the previous array
                 setSourceArray(createSourceArray(searchType, sources));
                 if (sourceArray !== undefined) {
-                //Convert the sourceArray to a string
-                setSourceString(sourceArray.toString());}
+                    //Convert the sourceArray to a string
+                    setSourceString(sourceArray.toString());
+                }
                 //Fetch the articles, based on their source
                 const articlesBySource = await FetchSourceData(searchType, sourceString, apikey, setNewslist, toggleError);
                 //Fetch the articles, based on the searchTerm
@@ -38,15 +40,12 @@ function Searchpage({apikey}) {
                 //Fill the newslist, based on searchType, with the matching list of articles
                 if (searchType === 'article') {
                     setNewslist(articlesbyArticle);
-                }
-                else if (searchType === 'source') {
+                } else if (searchType === 'source') {
                     setNewslist(articlesBySource);
-                }
-                else {
+                } else {
                     console.log("Nou gaat er iets op zijn kop verkeerd, er is geen searchType")
                 }
-            }
-            catch (e) {
+            } catch (e) {
                 console.error(e);
             }
         }
@@ -64,18 +63,18 @@ function Searchpage({apikey}) {
 
             <Searchbar/>
 
-            {error &&
-                <span>
-                    Oeps, er ging iets mis!
-                </span>
-            }
-
             <div className="search-page-container">
                 <FilterBar
                     input={newslist}
                 />
 
                 <div className="search-list">
+                    {error &&
+                        <p className="search-error">
+                            Something went wrong. Please try another search term.
+                        </p>
+                    }
+
                     {newslist &&
                         newslist.map((input) => {
                             return (
