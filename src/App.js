@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import {
     BrowserRouter as Router,
     Routes,
@@ -10,11 +10,14 @@ import Loginpage from "./pages/loginpage/Loginpage.js"
 import Profilepage from "./pages/profilepage/Profilepage.js"
 import Registerpage from "./pages/registerpage/Registerpage";
 import './App.css';
+import PrivateRoute from "./components/PrivateRoute";
+import {AuthContext} from "./context/AuthContext";
 
 function App() {
-
-    // const apiKey = '5d77ac405bbd4ac9972f3543df74af8c';
-    const apiKey = '4889b0ac0f97463aa0a71286db8da667';
+    const {authState: {isAuth}} = useContext(AuthContext);
+    // const apiKey = '4889b0ac0f97463aa0a71286db8da667';
+    // Alternate APIkey:
+    const apiKey = '5d77ac405bbd4ac9972f3543df74af8c';
 
     return (
         <>
@@ -30,7 +33,6 @@ function App() {
                                 path="/"
                                 element={
                                     <Homepage
-                                        country="nl"
                                         apikey={apiKey}
                                     />
                                 }
@@ -40,8 +42,6 @@ function App() {
                                 path="/search-results"
                                 element={
                                     <Searchpage
-                                        searchkey="test"
-                                        country="nl"
                                         apikey={apiKey}
                                     />
                                 }
@@ -64,7 +64,11 @@ function App() {
                             <Route
                                 path="/profile"
                                 element={
-                                    <Profilepage/>
+                                    <PrivateRoute
+                                        auth={isAuth}
+                                    >
+                                        <Profilepage/>
+                                    </PrivateRoute>
                                 }
                             />
                         </Routes>

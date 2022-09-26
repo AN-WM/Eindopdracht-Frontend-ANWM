@@ -1,7 +1,8 @@
 import React, {useState, useContext} from 'react';
 import './FilterBlock.css';
 import {SearchContext} from "../../context/SearchContext";
-
+import {useForm} from "react-hook-form";
+import updateFilters from "../../helpers/FilterBlockHelpers/updateFilters";
 
 let languageArray = [{
     language: "ar",
@@ -51,11 +52,32 @@ function CreateBlock(blockType, inputList) {
     const [languageBrief, toggleLanguageBrief] = useState(false);
     const [authorBrief, toggleAuthorBrief] = useState(false);
     const [sourceBrief, toggleSourceBrief] = useState(false);
-    const {searchValue: {language}, submitSearchValue} = useContext(SearchContext);
+    const {
+        searchParameter: {sourceId, language},
+        searchParameter,
+        setSearchParameter,
+        filterArray,
+        setFilterArray,
+    } = useContext(SearchContext);
+    const {register} = useForm();
 
-    function checkBox(value) {
-        let checkedString = language + value;
-        console.log(checkedString);
+    function handleChange(e, filter) {
+        switch (filter) {
+            case 'source':
+                const returnSource = updateFilters(filterArray, setFilterArray, searchParameter, setSearchParameter, sourceId, e.input.sourceId);
+                setSearchParameter({...searchParameter, sourceId: returnSource});
+                break;
+            case 'language':
+                setSearchParameter({...searchParameter, language: e.input.language});
+                break;
+            case 'sort':
+                const sortValue = document.getElementById("sort").value;
+                setSearchParameter({...searchParameter, sortValue: sortValue});
+                break;
+            default:
+                console.log("No filtertype selected");
+        }
+
     }
 
     switch (blockType) {
@@ -67,8 +89,7 @@ function CreateBlock(blockType, inputList) {
                     From:
                     <input
                         type="date"
-                        id="date-start"
-                        name="date-start"
+                        {...register("dateStart")}
                     />
                 </label>
 
@@ -76,8 +97,9 @@ function CreateBlock(blockType, inputList) {
                     To:
                     <input
                         type="date"
-                        id="date-end"
-                        name="date-end"
+                        {...register("dateEnd", {
+                            onChange: (e) => console.log(e)
+                        })}
                     />
                 </label>
             </div>;
@@ -93,18 +115,19 @@ function CreateBlock(blockType, inputList) {
                                 return (
                                     <div
                                         className="select-option"
-                                        key={input}
+                                        key={input.sourceName}
                                     >
                                         <input
                                             type="checkbox"
-                                            id={input}
-                                            name={input}
+                                            id={input.sourceName}
+                                            name={input.sourceName}
                                             value={input}
+                                            onChange={() => handleChange({input}, "source")}
                                         />
                                         <label
-                                            htmlFor={input}
+                                            htmlFor={input.sourceName}
                                         >
-                                            {input}
+                                            {input.sourceName}
                                         </label>
                                     </div>
                                 )
@@ -127,19 +150,20 @@ function CreateBlock(blockType, inputList) {
                                 return (
                                     <div
                                         className="select-option"
-                                        key={input}
+                                        key={input.sourceName}
                                     >
                                         <input
                                             type="checkbox"
-                                            id={input}
+                                            id={input.sourceName}
                                             name={input}
-                                            value={input}
+                                            value={input.sourceName}
+                                            onChange={() => handleChange({input}, "source")}
                                         />
 
                                         <label
-                                            htmlFor={input}
+                                            htmlFor={input.sourceName}
                                         >
-                                            {input}
+                                            {input.sourceName}
                                         </label>
                                     </div>
                                 )
@@ -170,10 +194,11 @@ function CreateBlock(blockType, inputList) {
                                 key={input.language}
                             >
                                 <input
-                                    type="checkbox"
+                                    type="radio"
                                     id={input.language}
-                                    name={input.language}
+                                    name="language"
                                     value={input.language}
+                                    onChange={() => handleChange({input}, "language")}
                                 />
                                 <label
                                     htmlFor={input.language}
@@ -204,11 +229,11 @@ function CreateBlock(blockType, inputList) {
                                 key={input.language}
                             >
                                 <input
-                                    type="checkbox"
+                                    type="radio"
                                     id={input.language}
-                                    name={input.language}
+                                    name="language"
                                     value={input.language}
-
+                                    onChange={() => handleChange({input}, "language")}
                                 />
 
                                 <label htmlFor={input.language}>
@@ -310,9 +335,14 @@ function CreateBlock(blockType, inputList) {
             return <div className="filter-block">
                 <h3>Sort by</h3>
 
-                <select name="sort" id="sort">
-                    <option value="date">Newest first</option>
-                    <option value="relevance">Relevancy</option>
+                <select
+                    name="sort"
+                    id="sort"
+                    onChange={() => handleChange("empty", "sort")}
+                >
+                    <option value="">Select option</option>
+                    <option value="publishedAt">Newest first</option>
+                    <option value="relevancy">Relevancy</option>
                     <option value="popularity">Popularity</option>
                 </select>
             </div>;
@@ -323,9 +353,12 @@ function CreateBlock(blockType, inputList) {
 }
 
 function FilterBlock({blockType, inputList}) {
+
     return (
         <>
-            {CreateBlock(blockType, inputList)}
+            <form>
+                {CreateBlock(blockType, inputList)}
+            </form>
         </>
     );
 }

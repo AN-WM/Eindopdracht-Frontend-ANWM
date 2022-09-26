@@ -5,9 +5,8 @@ import {useNavigate} from 'react-router-dom';
 import './Searchbar.css';
 
 function Searchbar() {
-    const {searchValue: {searchTerm, searchType}, searchFunction} = useContext(SearchContext);
+    const {searchParameter: {searchTerm, searchType}, searchFunction} = useContext(SearchContext);
     const navigate = useNavigate();
-
     const {handleSubmit, register} = useForm({
         defaultValues: {
             searchTerm: searchTerm,
@@ -18,7 +17,6 @@ function Searchbar() {
     function onFormSubmit(formData) {
         //Put search details in context
         searchFunction(formData.searchInput, formData.searchType);
-
 
         //Navigate to the search results
         navigate('/search-results');

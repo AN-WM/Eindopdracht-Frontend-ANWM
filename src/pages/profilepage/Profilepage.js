@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {useForm} from "react-hook-form";
 import Header from "../../components/header/Header";
 import Searchbar from "../../components/searchbar/Searchbar";
@@ -11,25 +11,39 @@ import updateCountry from "../../helpers/updateCountry";
 
 function Profilepage({searchtype}) {
     const [error, toggleError] = useState(false);
-    const {authState: {userName, userEmail, userCountry, userImage}, fetchUserFunction} = useContext(AuthContext);
+    const {authState: {userName, userEmail, userCountry}, fetchUserFunction} = useContext(AuthContext);
     const {handleSubmit, formState: {errors}, register, watch} = useForm();
     const token = localStorage.getItem('token');
+    const [updateMessage, toggleUpdateMessage] = useState(false);
 
     async function onFormSubmit(data) {
+        toggleUpdateMessage(false);
+
         //Update password, if new password has been entered
         if (data.password !== undefined && data.password !== "") {
             const passwordResponse = await updatePassword(data, toggleError, token);
-            passwordResponse === 200 && fetchUserFunction(token);
+            if (passwordResponse === 200) {
+                fetchUserFunction(token);
+                toggleUpdateMessage(true);
+            }
         }
+
         //Update email, if new email has been entered
         if (data.email !== undefined && data.email !== "") {
             const emailResponse = await updateEmail(data.email, toggleError, token);
-            emailResponse === 200 && fetchUserFunction(token);
+            if (emailResponse === 200) {
+                fetchUserFunction(token);
+                toggleUpdateMessage(true);
+            }
         }
+
         //Update country, if new country has been entered
         if (data.country !== undefined && data.country !== "") {
             const countryResponse = await updateCountry(data.country, toggleError, token);
-            countryResponse === 200 && fetchUserFunction(token);
+            if (countryResponse === 200) {
+                fetchUserFunction(token);
+                toggleUpdateMessage(true);
+            }
         }
     }
 
@@ -49,6 +63,10 @@ function Profilepage({searchtype}) {
 
             {error &&
                 <p>Unable to fetch profile data</p>
+            }
+
+            {updateMessage &&
+                <p>Profile has been updated</p>
             }
 
             <form

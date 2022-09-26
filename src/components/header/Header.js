@@ -20,7 +20,7 @@ function Header({page}) {
 
     function signOut() {
         signOutFunction();
-        navigate("/");
+        navigate(0);
     }
 
     return (

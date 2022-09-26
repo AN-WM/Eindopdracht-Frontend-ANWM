@@ -16,9 +16,15 @@ function AuthContextProvider({children}) {
     });
 
     useEffect(() => {
+        setAuthState({
+            status: "pending"
+        })
+
         const token = localStorage.getItem('token');
+
         if (token !== "undefined" && token !== null) {
             fetchUser(token)
+            console.log()
             setAuthState({
                 status: 'done'
             })
@@ -32,52 +38,6 @@ function AuthContextProvider({children}) {
         // eslint-disable-next-line
     }, []);
 
-    async function fetchUser(token) {
-        console.log(token);
-        try {
-            const result = await axios.get(`https://frontend-educational-backend.herokuapp.com/api/user`, {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": "Bearer " + token
-                    }
-                }
-            );
-            console.log("Fetch user haalt deze resultaten op");
-            console.log(result);
-            result.status === 200 && logData(result.data);
-        } catch (e) {
-            console.log(e);
-        }
-    }
-
-    function changeAuth() {
-        setAuthState(!authState.isAuth);
-    }
-
-    function logData(data) {
-        setAuthState({
-            isAuth: true,
-            userName: data.username,
-            userEmail: data.email,
-            userCountry: data.info,
-        })
-        localStorage.setItem('token', data.accessToken);
-    }
-
-
-    async function signIn(username, password) {
-        try {
-            const result = await axios.post(`https://frontend-educational-backend.herokuapp.com/api/auth/signin`, {
-                    "username": username,
-                    "password": password,
-                }
-            );
-            result.status === 200 && logData(result.data);
-        } catch (e) {
-            console.log(e);
-        }
-    }
-
     function signOut() {
         localStorage.clear();
         setAuthState({
@@ -88,7 +48,55 @@ function AuthContextProvider({children}) {
                 userImg: "",
                 userCountry: ""
             },
+        });
+
+    }
+
+    async function signIn(username, password) {
+        try {
+            const result = await axios.post(`https://frontend-educational-backend.herokuapp.com/api/auth/signin`, {
+                    "username": username,
+                    "password": password,
+                }
+            );
+            result.status === 200 && logToken(result.data.accessToken);
+            return result.status;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    function logToken(token) {
+        localStorage.setItem('token', token);
+        fetchUser(token);
+    }
+
+    async function fetchUser(token) {
+        try {
+            const result = await axios.get(`https://frontend-educational-backend.herokuapp.com/api/user`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + token
+                    }
+                }
+            );
+            result.status === 200 && logData(result.data);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    function logData(data) {
+        setAuthState({
+            isAuth: true,
+            userName: data.username,
+            userEmail: data.email,
+            userCountry: data.info,
         })
+    }
+
+    function changeAuth() {
+        setAuthState(!authState.isAuth);
     }
 
     const data = {

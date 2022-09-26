@@ -11,6 +11,7 @@ import {useNavigate} from "react-router-dom";
 function Registerpage() {
     const {signInFunction} = useContext(AuthContext);
     const {handleSubmit, formState: {errors}, register, watch} = useForm();
+    const [errorMessage, setErrorMessage] = useState("Something went wrong");
     const [error, toggleError] = useState(false);
     const navigate = useNavigate();
 
@@ -20,6 +21,9 @@ function Registerpage() {
     }
 
     async function registerUser(data) {
+        toggleError(false);
+        setErrorMessage("Something went wrong");
+
         try {
             const {status} = await axios.post(`https://frontend-educational-backend.herokuapp.com/api/auth/signup`, {
                     "username": data.username,
@@ -29,14 +33,12 @@ function Registerpage() {
                 }
             );
             toggleError(false);
-            console.log(status);
             status === 200 && confirmRegistration(data);
         } catch (e) {
-            console.log(e);
+            setErrorMessage(e.response.data.message);
             toggleError(true);
         }
     }
-
 
     function onFormSubmit(data) {
         registerUser(data);
@@ -53,6 +55,8 @@ function Registerpage() {
             <img src={logo} alt="App logo" className="large-logo"/>
 
             <h1>Welcome!</h1>
+
+            {error && <p>{errorMessage}</p>}
 
             <form
                 onSubmit={handleSubmit(onFormSubmit)}

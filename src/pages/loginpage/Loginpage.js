@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import Searchbar from "../../components/searchbar/Searchbar";
 import Header from "../../components/header/Header";
@@ -10,11 +10,16 @@ import {useNavigate} from "react-router-dom";
 function Loginpage() {
     const {handleSubmit, formState: {errors}, register} = useForm();
     const {signInFunction} = useContext(AuthContext);
+    const [signInError, toggleSignInError] = useState(false);
     const navigate = useNavigate();
 
-    function onFormSubmit(data) {
-        signInFunction(data.username, data.password);
-        navigate('/profile');
+    async function onFormSubmit(data) {
+        toggleSignInError(false);
+
+        //Try to sign in with provided username and password
+        const returnCode = await signInFunction(data.username, data.password);
+        //If sign in succeeded, proceed to home page. If not, display error message.
+        returnCode === 200 ? navigate('/') : toggleSignInError(true);
     }
 
     return (
@@ -28,6 +33,8 @@ function Loginpage() {
             <img src={logo} alt="App logo" className="large-logo"/>
 
             <h1>Welcome back!</h1>
+
+            {signInError && <p>The username or password you entered is incorrect</p>}
 
             <form
                 onSubmit={handleSubmit(onFormSubmit)}

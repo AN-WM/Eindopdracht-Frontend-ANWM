@@ -1,15 +1,44 @@
 function CreateList(input, type) {
     let authorList = new Set();
-    let sourceList = new Set();
+    const sourceList = [];
+    let [sourceName, sourceId] = sourceList;
     let authorReturnList = [];
-    let sourceReturnList = [];
+    let newItem = false;
 
     function AddAuthor(item) {
         item !== null && authorList.add(item);
     }
 
-    function AddSource(item) {
-        item !== null && sourceList.add(item);
+    function AddSource(item, id) {
+        newItem = false;
+        newItem = checkDoubles(item, id);
+        !newItem && sourceList.push({sourceName: item, sourceId: id});
+    }
+
+    function checkDoubles(item, id) {
+        for (let i = 0; i < sourceList.length; i++) {
+            const {sourceName, sourceId} = sourceList[i];
+            //Only add a value to the list if it doesn't exist in the list already, and if it has an id
+            if ((sourceName === item && sourceId === id) || id === null) {
+                return true;
+            }
+        }
+        return false
+    }
+
+    function sortSourceList() {
+        sourceList.sort((a, b) => {
+            let sourceA = a.sourceName.toLowerCase(),
+                sourceB = b.sourceName.toLowerCase();
+
+            if (sourceA < sourceB) {
+                return -1;
+            } else if (sourceA > sourceB) {
+                return 1;
+            } else {
+                return 0
+            }
+        });
     }
 
     //Create list of unique authors
@@ -25,11 +54,15 @@ function CreateList(input, type) {
     //Create list of unique sources
     } else if (type === 'source') {
         input.forEach((input) => {
-            AddSource(input.source.name);
+            AddSource(input.source.name, input.source.id);
         });
-        sourceReturnList = Array.from(sourceList);
-        sourceReturnList.sort();
-        return sourceReturnList;
+
+        //Put list in alphabetical order, based on Item
+        sortSourceList();
+
+        return sourceList;
+
+    //If no type was provided, provide a console log
     } else {
         console.log('Geen correct type ontvangen, kan geen lijst maken')
     }

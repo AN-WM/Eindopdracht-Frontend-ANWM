@@ -9,11 +9,13 @@ import {SearchContext} from "../../context/SearchContext";
 import FetchArticleData from "../../helpers/fetchArticleData";
 import FetchSourceData from "../../helpers/fetchSourceData";
 import createSourceArray from "../../helpers/createSourceArray";
+import { v4 as uuidv4 } from 'uuid';
+import loginpage from "../loginpage/Loginpage";
 
 function Searchpage({apikey}) {
     const [error, toggleError] = useState(false);
     const [newsList, setNewsList] = useState([]);
-    const {searchValue: {searchTerm, searchType}} = useContext(SearchContext);
+    const {searchParameter: {searchTerm, searchType, sourceId, language, sortValue}} = useContext(SearchContext);
 
     useEffect(() => {
         toggleError(false);
@@ -23,7 +25,7 @@ function Searchpage({apikey}) {
                 //Fill the newsList, based on searchType, with the matching list of articles
                 if (searchType === 'article') {
                     //Fetch the articles, based on the searchTerm
-                    const articlesByArticle = await FetchArticleData(searchType, searchTerm, apikey, setNewsList, toggleError);
+                    const articlesByArticle = await FetchArticleData(searchType, searchTerm, sourceId, language, sortValue, apikey, setNewsList, toggleError);
 
                     //Fill the newsList
                     setNewsList(articlesByArticle);
@@ -50,7 +52,7 @@ function Searchpage({apikey}) {
 
         loadData()
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [searchTerm, searchType, apikey])
+    }, [searchTerm, searchType, sourceId, language, sortValue, apikey])
 
 
     return (
@@ -78,7 +80,7 @@ function Searchpage({apikey}) {
                             return (
                                 <NewsTile
                                     article={input}
-                                    key={input.url + input.id}
+                                    key={input.url + uuidv4()}
                                     error={error}
                                     toggleError={toggleError}
                                 />
