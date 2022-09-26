@@ -6,7 +6,7 @@ async function FetchArticleData(searchType, searchTerm, sourceId, language, sort
     let sortString= "";
 
     if (sourceId !== "" && sourceId !== undefined) {
-        sourceString = `&sources=${sourceId}`;
+        sourceString = `&domains=${sourceId}`;
     }
     if (language !== "" && language !== undefined) {
         languageString = `&language=${language}`;

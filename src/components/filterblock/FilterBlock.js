@@ -5,6 +5,9 @@ import {useForm} from "react-hook-form";
 import updateFilters from "../../helpers/FilterBlockHelpers/updateFilters";
 
 let languageArray = [{
+    language: "",
+    full: "All"
+}, {
     language: "ar",
     full: "Arabic"
 }, {
@@ -50,7 +53,6 @@ let briefLanguageArray = languageArray.slice(0, 5);
 
 function CreateBlock(blockType, inputList) {
     const [languageBrief, toggleLanguageBrief] = useState(false);
-    const [authorBrief, toggleAuthorBrief] = useState(false);
     const [sourceBrief, toggleSourceBrief] = useState(false);
     const {
         searchParameter: {sourceId, language},
@@ -64,7 +66,7 @@ function CreateBlock(blockType, inputList) {
     function handleChange(e, filter) {
         switch (filter) {
             case 'source':
-                const returnSource = updateFilters(filterArray, setFilterArray, searchParameter, setSearchParameter, sourceId, e.input.sourceId);
+                const returnSource = updateFilters(filterArray, setFilterArray, searchParameter, setSearchParameter, sourceId, e.input);
                 setSearchParameter({...searchParameter, sourceId: returnSource});
                 break;
             case 'language':
@@ -106,78 +108,106 @@ function CreateBlock(blockType, inputList) {
 
         case 'source':
             if (inputList !== undefined) {
-                let briefList = inputList.slice(0, 5);
-                return (sourceBrief === false ?
-                        //Basic source list, with button to show more
-                        <div className="filter-block">
-                            <h3>Source</h3>
-                            {briefList.map((input) => {
-                                return (
-                                    <div
-                                        className="select-option"
-                                        key={input.sourceName}
-                                    >
-                                        <input
-                                            type="checkbox"
-                                            id={input.sourceName}
-                                            name={input.sourceName}
-                                            value={input}
-                                            onChange={() => handleChange({input}, "source")}
-                                        />
-                                        <label
-                                            htmlFor={input.sourceName}
+                if (inputList.length > 5) {
+                    let briefList = inputList.slice(0, 5);
+                    return (sourceBrief === false ?
+                            //Basic source list, with button to show more
+                            <div className="filter-block">
+                                <h3>Source</h3>
+                                {briefList.map((input) => {
+                                    return (
+                                        <div
+                                            className="select-option"
+                                            key={input}
                                         >
-                                            {input.sourceName}
-                                        </label>
-                                    </div>
-                                )
-                            })}
+                                            <input
+                                                type="checkbox"
+                                                id={input}
+                                                name={input}
+                                                value={input}
+                                                onChange={() => handleChange({input}, "source")}
+                                            />
+                                            <label
+                                                htmlFor={input}
+                                            >
+                                                {input}
+                                            </label>
+                                        </div>
+                                    )
+                                })}
 
-                            <button
-                                type="button"
-                                className="see-more"
-                                onClick={() => toggleSourceBrief(!sourceBrief)}
-                            >
-                                See more
-                            </button>
-                        </div>
-                        :
-                        //Full source list, with button to show less
-                        <div className="filter-block">
-                            <h3>Source</h3>
+                                <button
+                                    type="button"
+                                    className="see-more"
+                                    onClick={() => toggleSourceBrief(!sourceBrief)}
+                                >
+                                    See more
+                                </button>
+                            </div>
+                            :
+                            //Full source list, with button to show less
+                            <div className="filter-block">
+                                <h3>Source</h3>
 
-                            {inputList.map((input) => {
-                                return (
-                                    <div
-                                        className="select-option"
-                                        key={input.sourceName}
-                                    >
-                                        <input
-                                            type="checkbox"
-                                            id={input.sourceName}
-                                            name={input}
-                                            value={input.sourceName}
-                                            onChange={() => handleChange({input}, "source")}
-                                        />
-
-                                        <label
-                                            htmlFor={input.sourceName}
+                                {inputList.map((input) => {
+                                    return (
+                                        <div
+                                            className="select-option"
+                                            key={input}
                                         >
-                                            {input.sourceName}
-                                        </label>
-                                    </div>
-                                )
-                            })}
+                                            <input
+                                                type="checkbox"
+                                                id={input}
+                                                name={input}
+                                                value={input}
+                                                onChange={() => handleChange({input}, "source")}
+                                            />
 
-                            <button
-                                type="button"
-                                className="see-less"
-                                onClick={() => toggleSourceBrief(!sourceBrief)}
-                            >
-                                See less
-                            </button>
-                        </div>
-                );
+                                            <label
+                                                htmlFor={input}
+                                            >
+                                                {input}
+                                            </label>
+                                        </div>
+                                    )
+                                })}
+
+                                <button
+                                    type="button"
+                                    className="see-less"
+                                    onClick={() => toggleSourceBrief(!sourceBrief)}
+                                >
+                                    See less
+                                </button>
+                            </div>
+                    );
+                } else {
+                    return <div className="filter-block">
+                        <h3>Source</h3>
+                        {inputList.map((input) => {
+                            return (
+                                <div
+                                    className="select-option"
+                                    key={input}
+                                >
+                                    <input
+                                        type="checkbox"
+                                        id={input}
+                                        name={input}
+                                        value={input}
+                                        onChange={() => handleChange({input}, "source")}
+                                    />
+
+                                    <label
+                                        htmlFor={input}
+                                    >
+                                        {input}
+                                    </label>
+                                </div>
+                            )
+                        })}
+                    </div>
+                }
             }
             break;
 
@@ -251,85 +281,6 @@ function CreateBlock(blockType, inputList) {
                         See less
                     </button>
                 </div>);
-
-        case 'author':
-            if (inputList !== undefined) {
-                let briefList = inputList.slice(0, 5);
-                return (authorBrief === false ?
-                        //Basic author list, with button to show more
-                        <div className="filter-block">
-                            <h3>Author</h3>
-
-                            {briefList.map((input) => {
-                                return (
-                                    <div
-                                        className="select-option"
-                                        key={input}
-                                    >
-                                        <input
-                                            type="checkbox"
-                                            id={input}
-                                            name={input}
-                                            value={input}
-
-                                        />
-                                        <label
-                                            htmlFor={input}
-                                        >
-                                            {input}
-                                        </label>
-                                    </div>
-                                )
-                            })}
-
-                            <button
-                                type="button"
-                                className="see-more"
-                                onClick={() => toggleAuthorBrief(!authorBrief)}
-                            >
-                                See more
-                            </button>
-                        </div>
-                        :
-                        //Full author list, with button to show less
-                        <div
-                            className="filter-block"
-                        >
-                            <h3>Author</h3>
-
-                            {inputList.map((input) => {
-                                return (
-                                    <div
-                                        className="select-option"
-                                        key={input}
-                                    >
-                                        <input
-                                            type="checkbox"
-                                            id={input}
-                                            name={input}
-                                            value={input}
-
-                                        />
-                                        <label
-                                            htmlFor={input}
-                                        >
-                                            {input}
-                                        </label>
-                                    </div>
-                                )
-                            })}
-
-                            <button
-                                type="button"
-                                className="see-less"
-                                onClick={() => toggleAuthorBrief(!authorBrief)}
-                            >
-                                See less
-                            </button>
-                        </div>
-                );
-            }
-            break;
 
         case 'sort':
             return <div className="filter-block">

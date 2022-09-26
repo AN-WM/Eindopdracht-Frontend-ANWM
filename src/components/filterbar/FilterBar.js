@@ -5,28 +5,14 @@ import {SearchContext} from "../../context/SearchContext";
 import './FilterBar.css'
 
 function FilterBar({input}) {
-    const [authorList, setAuthorList] = useState([]);
-    const [sourceList, setSourceList] = useState([]);
+    const [domainList, setDomainList] = useState([]);
     const {searchParameter: {searchType, searchTerm}, sourceArray, setSourceArray} = useContext(SearchContext);
 
     useEffect(() => {
             if (input !== undefined) {
-                //If there's no sourceArray in SearchContext
-                console.log(searchTerm);
-                console.log(input);
-                console.log(sourceArray.length);
-                console.log(sourceArray);
-              // if (sourceArray.length <= 0) {
-              //       setSourceList(createList(input, 'source'));
-              //       setSourceArray(sourceList);
-              //   }
-              //   else {
-              //       setSourceList(sourceArray);
-              //   }
-                setSourceList(createList(input, 'source'));
-                setAuthorList(createList(input, 'author'));
+                setDomainList(createList(input, 'domain'));
             }
-        }, [searchType, searchTerm]
+        }, [input]
     );
 
     return (
@@ -41,7 +27,7 @@ function FilterBar({input}) {
             {searchType === 'article' &&
                 <FilterBlock
                     blockType="source"
-                    inputList={sourceList}
+                    inputList={domainList}
                 />}
 
             {searchType === 'article' &&
@@ -50,11 +36,6 @@ function FilterBar({input}) {
                     inputList="input"
                 />
             }
-
-            {/*<FilterBlock*/}
-            {/*    blockType="author"*/}
-            {/*    inputList={authorList}*/}
-            {/*/>*/}
 
             <FilterBlock
                 blockType="sort"

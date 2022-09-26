@@ -10,18 +10,24 @@ import FetchArticleData from "../../helpers/fetchArticleData";
 import FetchSourceData from "../../helpers/fetchSourceData";
 import createSourceArray from "../../helpers/createSourceArray";
 import { v4 as uuidv4 } from 'uuid';
-import loginpage from "../loginpage/Loginpage";
 
 function Searchpage({apikey}) {
     const [error, toggleError] = useState(false);
     const [newsList, setNewsList] = useState([]);
     const {searchParameter: {searchTerm, searchType, sourceId, language, sortValue}} = useContext(SearchContext);
+    const [errorMessage, setErrorMessage] = useState("Oops, something went wrong");
 
     useEffect(() => {
         toggleError(false);
 
         async function loadData() {
+            setErrorMessage("Oops, something went wrong");
+
             try {
+                if (searchTerm === "") {
+                    setErrorMessage("Please enter a keyword to start your search");
+                    toggleError(true);
+                }
                 //Fill the newsList, based on searchType, with the matching list of articles
                 if (searchType === 'article') {
                     //Fetch the articles, based on the searchTerm
@@ -43,6 +49,7 @@ function Searchpage({apikey}) {
                     setNewsList(articlesBySource);
                 } else {
                     console.log("Error: unknown searchtype");
+                    setErrorMessage("No valid searchtype was registered, please try again by selecting either source or article")
                     toggleError(true);
                 }
             } catch (e) {
@@ -65,7 +72,7 @@ function Searchpage({apikey}) {
 
             {error &&
                 <span>
-                    Oeps, er ging iets mis!
+                    {errorMessage}
                 </span>
             }
 
