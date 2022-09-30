@@ -5,9 +5,9 @@ import Searchbar from "../../components/searchbar/Searchbar";
 import profilepic from "../../assets/Generic profile pic change.png";
 import "./Profilepage.css";
 import {AuthContext} from "../../context/AuthContext";
-import updatePassword from "../../helpers/updatePassword";
-import updateEmail from "../../helpers/updateEmail";
-import updateCountry from "../../helpers/updateCountry";
+import updatePassword from "../../helpers/ProfilepageHelpers/updatePassword";
+import updateEmail from "../../helpers/ProfilepageHelpers/updateEmail";
+import updateCountry from "../../helpers/ProfilepageHelpers/updateCountry";
 
 function Profilepage({searchtype}) {
     const [error, toggleError] = useState(false);
@@ -62,11 +62,11 @@ function Profilepage({searchtype}) {
             <h1>Profile</h1>
 
             {error &&
-                <p>Unable to fetch profile data</p>
+                <h4 className="error-message">Unable to fetch profile data</h4>
             }
 
             {updateMessage &&
-                <p>Profile has been updated</p>
+                <h4 className="success-message">Profile has been updated</h4>
             }
 
             <form
@@ -85,7 +85,7 @@ function Profilepage({searchtype}) {
                         disabled
                     />
                 </label>
-                {errors.username && <p>{errors.username.message}</p>}
+                {errors.username && <h4 className="error-message">{errors.username.message}</h4>}
 
                 <label
                     className="profile-item"
@@ -103,7 +103,7 @@ function Profilepage({searchtype}) {
                         })}
                     />
                 </label>
-                {errors.password && <p>{errors.password.message}</p>}
+                {errors.password && <h4 className="error-message">{errors.password.message}</h4>}
 
                 <label
                     className="profile-item"
@@ -122,7 +122,7 @@ function Profilepage({searchtype}) {
                         })}
                     />
                 </label>
-                {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
+                {errors.confirmPassword && <h4 className="error-message">{errors.confirmPassword.message}</h4>}
 
                 <label
                     className="profile-item"
@@ -136,7 +136,7 @@ function Profilepage({searchtype}) {
                         })}
                     />
                 </label>
-                {errors.email && <p>{errors.email.message}</p>}
+                {errors.email && <h4 className="error-message">{errors.email.message}</h4>}
 
                 <label
                     className="profile-item"

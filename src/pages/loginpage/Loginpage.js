@@ -34,7 +34,7 @@ function Loginpage() {
 
             <h1>Welcome back!</h1>
 
-            {signInError && <p>The username or password you entered is incorrect</p>}
+            {signInError && <h4 className="error-message">The username or password you entered is incorrect</h4>}
 
             <form
                 onSubmit={handleSubmit(onFormSubmit)}
@@ -45,7 +45,7 @@ function Loginpage() {
                     placeholder="Enter username"
                     {...register("username", {required: "Username is required"})}
                 />
-                {errors.username && <p>{errors.username.message}</p>}
+                {errors.username && <h4 className="error-message">{errors.username.message}</h4>}
 
                 <input
                     type="password"
@@ -53,7 +53,7 @@ function Loginpage() {
                     placeholder="Enter password"
                     {...register("password", {required: "Password is required"})}
                 />
-                {errors.password && <p>{errors.password.message}</p>}
+                {errors.password && <h4 className="error-message">{errors.password.message}</h4>}
 
                 <button
                     type="submit"

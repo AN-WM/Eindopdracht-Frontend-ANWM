@@ -1,25 +1,29 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import {useForm} from 'react-hook-form';
-import {SearchContext} from "../../context/SearchContext";
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, createSearchParams} from 'react-router-dom';
 import './Searchbar.css';
 
-function Searchbar() {
-    const {searchParameter: {searchTerm, searchType}, searchFunction} = useContext(SearchContext);
+function Searchbar({placeHolder, searchType}) {
     const navigate = useNavigate();
     const {handleSubmit, register} = useForm({
         defaultValues: {
-            searchTerm: searchTerm,
-            searchType: searchType
+            'searchInput': placeHolder || '',
+            'searchType': searchType || 'article',
         }
     });
 
     function onFormSubmit(formData) {
-        //Put search details in context
-        searchFunction(formData.searchInput, formData.searchType);
+        const params = {
+            searchType: formData.searchType,
+            searchQuery: formData.searchInput,
+            sourceId: '',
+            language: ''
+        };
 
-        //Navigate to the search results
-        navigate('/search-results');
+        navigate({
+            pathname: '/search-results/',
+            search: `${createSearchParams(params)}`,
+        });
     }
 
     return (
@@ -32,7 +36,7 @@ function Searchbar() {
                     <input
                         type="text"
                         className="input-bar"
-                        placeholder="Search the news"
+                        placeholder={placeHolder ? placeHolder : "Search the news"}
                         {...register("searchInput")}
                     />
 
@@ -66,8 +70,6 @@ function Searchbar() {
                     Search
                 </button>
             </div>
-
-
         </form>
     );
 }

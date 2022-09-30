@@ -11,8 +11,6 @@ async function fetchSourceList(searchTerm, apikey, toggleError) {
         console.log(e);
         toggleError(true);
     }
-
-    // console.log(sourceList);
 }
 
 export default fetchSourceList;

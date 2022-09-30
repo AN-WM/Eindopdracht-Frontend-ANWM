@@ -1,18 +1,24 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import FilterBlock from "../filterblock/FilterBlock";
 import createList from "../../helpers/createList";
-import {SearchContext} from "../../context/SearchContext";
 import './FilterBar.css'
 
-function FilterBar({input}) {
+function FilterBar({filterList, setFilterList, input, searchParams, setSearchParams, toggleError, setErrorMessage}) {
     const [domainList, setDomainList] = useState([]);
-    const {searchParameter: {searchType, searchTerm}, sourceArray, setSourceArray} = useContext(SearchContext);
+    const {searchType, searchQuery} = Object.fromEntries([...searchParams]);
 
     useEffect(() => {
-            if (input !== undefined) {
-                setDomainList(createList(input, 'domain'));
+        if (filterList.length === 0) {
+            if (input !== undefined && input.length !== 0) {
+                const newDomains = createList(input, 'domain')
+                setDomainList(newDomains);
+                setFilterList(newDomains);
             }
-        }, [input]
+        } else {
+            setDomainList(filterList);
+        }
+            // eslint-disable-next-line
+        }, []
     );
 
     return (
@@ -22,24 +28,40 @@ function FilterBar({input}) {
             <FilterBlock
                 blockType="date"
                 input="input"
+                searchParams={searchParams}
+                setSearchParams={setSearchParams}
+                toggleError={toggleError}
+                setErrorMessage={setErrorMessage}
             />
 
             {searchType === 'article' &&
                 <FilterBlock
                     blockType="source"
                     inputList={domainList}
+                    searchParams={searchParams}
+                    setSearchParams={setSearchParams}
+                    toggleError={toggleError}
+                    setErrorMessage={setErrorMessage}
                 />}
 
             {searchType === 'article' &&
                 <FilterBlock
                     blockType="language"
                     inputList="input"
+                    searchParams={searchParams}
+                    setSearchParams={setSearchParams}
+                    toggleError={toggleError}
+                    setErrorMessage={setErrorMessage}
                 />
             }
 
             <FilterBlock
                 blockType="sort"
                 input="input"
+                searchParams={searchParams}
+                setSearchParams={setSearchParams}
+                toggleError={toggleError}
+                setErrorMessage={setErrorMessage}
             />
         </div>
     );

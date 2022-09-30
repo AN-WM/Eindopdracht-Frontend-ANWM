@@ -1,3 +1,20 @@
+.validation {
+    display: flex;
+    align-self: flex-start;
+}
+
+.validation-icon {
+    width: 1rem;
+    height: 1rem;
+    margin: 0.5rem;
+}
+
+#requirement {
+    color: hsl(0, 0%, 46%);
+    font-weight: 500;
+    font-size: 1rem;
+}
+
 #register-button {
     width: 250px;
     height: 40px;

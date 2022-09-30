@@ -6,11 +6,14 @@ import Header from "../../components/header/Header";
 import axios from "axios";
 import './Homepage.css';
 import {AuthContext} from "../../context/AuthContext";
+import {createSearchParams} from 'react-router-dom';
 
 function Homepage({apikey}) {
     const [error, toggleError] = useState(false);
     const [newslist, setNewslist] = useState();
     const {authState: {userCountry}} = useContext(AuthContext);
+    const params = { type: '', input: '' };
+
 
     useEffect(() => {
         toggleError(false);
@@ -43,10 +46,12 @@ function Homepage({apikey}) {
 
             <img src={logo} alt="App logo" className="large-logo"/>
 
-            <Searchbar/>
+            <Searchbar
+                searchParams={createSearchParams(params)}
+            />
 
             {error &&
-                <span>
+                <span id="error-message">
                     Oeps, er ging iets mis!
                 </span>
             }

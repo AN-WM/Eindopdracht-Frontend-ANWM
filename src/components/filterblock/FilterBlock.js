@@ -1,8 +1,7 @@
 import React, {useState, useContext} from 'react';
 import './FilterBlock.css';
-import {SearchContext} from "../../context/SearchContext";
-import {useForm} from "react-hook-form";
 import updateFilters from "../../helpers/FilterBlockHelpers/updateFilters";
+import checkDate from "../../helpers/FilterBlockHelpers/checkDate";
 
 let languageArray = [{
     language: "",
@@ -51,35 +50,59 @@ let languageArray = [{
 
 let briefLanguageArray = languageArray.slice(0, 5);
 
-function CreateBlock(blockType, inputList) {
+function CreateBlock(blockType, inputList, searchParams, setSearchParams, toggleError, setErrorMessage) {
     const [languageBrief, toggleLanguageBrief] = useState(false);
     const [sourceBrief, toggleSourceBrief] = useState(false);
-    const {
-        searchParameter: {sourceId, language},
-        searchParameter,
-        setSearchParameter,
-        filterArray,
-        setFilterArray,
-    } = useContext(SearchContext);
-    const {register} = useForm();
+    const {sourceId, startDate, endDate} = Object.fromEntries([...searchParams]);
+
 
     function handleChange(e, filter) {
+        const oldParams = Object.fromEntries([...searchParams]);
         switch (filter) {
+            case 'date':
+                let dateValue = '';
+                let processedDate = '';
+
+                if (e === "start") {
+                    dateValue = document.getElementById("dateStart").value;
+                    processedDate = checkDate("start", dateValue, endDate, toggleError, setErrorMessage)
+                    processedDate !== "error" &&
+                        setSearchParams({
+                            ...oldParams,
+                            startDate: processedDate
+                        })
+                } else if (e === "end") {
+                    dateValue = document.getElementById("dateEnd").value;
+                    processedDate = checkDate("end", startDate, dateValue, toggleError, setErrorMessage);
+                    processedDate !== "error" &&
+                        setSearchParams({
+                            ...oldParams,
+                            endDate: processedDate
+                        })
+                }
+                break;
             case 'source':
-                const returnSource = updateFilters(filterArray, setFilterArray, searchParameter, setSearchParameter, sourceId, e.input);
-                setSearchParameter({...searchParameter, sourceId: returnSource});
+                setSearchParams({
+                    ...oldParams,
+                    sourceId: updateFilters(sourceId, e.input)
+                })
                 break;
             case 'language':
-                setSearchParameter({...searchParameter, language: e.input.language});
+                setSearchParams({
+                    ...oldParams,
+                    language: e.input.language
+                })
                 break;
             case 'sort':
                 const sortValue = document.getElementById("sort").value;
-                setSearchParameter({...searchParameter, sortValue: sortValue});
+                setSearchParams({
+                    ...oldParams,
+                    sortValue: sortValue
+                })
                 break;
             default:
                 console.log("No filtertype selected");
         }
-
     }
 
     switch (blockType) {
@@ -91,7 +114,9 @@ function CreateBlock(blockType, inputList) {
                     From:
                     <input
                         type="date"
-                        {...register("dateStart")}
+                        id="dateStart"
+                        defaultValue={startDate}
+                        onChange={() => handleChange("start", "date")}
                     />
                 </label>
 
@@ -99,9 +124,9 @@ function CreateBlock(blockType, inputList) {
                     To:
                     <input
                         type="date"
-                        {...register("dateEnd", {
-                            onChange: (e) => console.log(e)
-                        })}
+                        id="dateEnd"
+                        defaultValue={endDate}
+                        onChange={() => handleChange("end", "date")}
                     />
                 </label>
             </div>;
@@ -303,12 +328,12 @@ function CreateBlock(blockType, inputList) {
     }
 }
 
-function FilterBlock({blockType, inputList}) {
+function FilterBlock({blockType, inputList, searchParams, setSearchParams, toggleError, setErrorMessage}) {
 
     return (
         <>
             <form>
-                {CreateBlock(blockType, inputList)}
+                {CreateBlock(blockType, inputList, searchParams, setSearchParams, toggleError, setErrorMessage)}
             </form>
         </>
     );

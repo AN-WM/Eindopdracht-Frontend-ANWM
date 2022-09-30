@@ -3,6 +3,8 @@ import {useForm} from "react-hook-form";
 import Header from "../../components/header/Header";
 import Searchbar from "../../components/searchbar/Searchbar";
 import logo from "../../assets/Newslogo.png";
+import greenTick from "../../assets/Green tick.png";
+import redCross from "../../assets/Red cross.png";
 import "./Registerpage.css";
 import axios from "axios";
 import {AuthContext} from "../../context/AuthContext";
@@ -10,10 +12,12 @@ import {useNavigate} from "react-router-dom";
 
 function Registerpage() {
     const {signInFunction} = useContext(AuthContext);
-    const {handleSubmit, formState: {errors}, register, watch} = useForm();
+    const {handleSubmit, formState: {errors}, register, watch, getValues} = useForm();
     const [errorMessage, setErrorMessage] = useState("Something went wrong");
     const [error, toggleError] = useState(false);
     const navigate = useNavigate();
+    const passwordCheck = new RegExp(/(?=.*[^A-Za-z0-9])(?=.*\d)/);
+    const emailCheck = new RegExp(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/);
 
     function confirmRegistration(data) {
         signInFunction(data.username, data.password);
@@ -56,7 +60,7 @@ function Registerpage() {
 
             <h1>Welcome!</h1>
 
-            {error && <p>{errorMessage}</p>}
+            {error && <h4 className="error-message">{errorMessage}</h4>}
 
             <form
                 onSubmit={handleSubmit(onFormSubmit)}
@@ -68,10 +72,18 @@ function Registerpage() {
                     maxLength="20"
                     {...register("username", {
                         required: "Username is required",
-                        minLength: {value: 6, message: "Username must have more than 6 characters"},
+                        minLength: {value: 6},
                     })}
                 />
-                {errors.username && <p>{errors.username.message}</p>}
+
+                {/*Check whether username has the required length, and display validation symbol accordingly*/}
+                <div className="validation">
+                    {watch("username") && watch("username").length >= 6 && watch("username").length <= 20
+                        ? <img src={greenTick} alt="valid" className="validation-icon"/>
+                        : <img src={redCross} alt="invalid" className="validation-icon"/>
+                    }
+                    <p id="requirement">Username must be between 6-20 characters</p>
+                </div>
 
                 <input
                     type="password"
@@ -79,13 +91,27 @@ function Registerpage() {
                     placeholder="Enter password"
                     {...register("password", {
                         required: "Password is required",
-                        minLength: {
-                            value: 6,
-                            message: "Password should have at least 6 characters"
-                        },
+                        minLength: {value: 6}, pattern: passwordCheck
                     })}
                 />
-                {errors.password && <p>{errors.password.message}</p>}
+
+                {/*Check whether password has the required length, and display validation requirements accordingly*/}
+                <div className="validation">
+                    {watch("password") && watch("password").length >= 6 && watch("password").length <= 20
+                        ? <img src={greenTick} alt="valid" className="validation-icon"/>
+                        : <img src={redCross} alt="invalid" className="validation-icon"/>
+                    }
+                    <p id="requirement">Password must be between 6-20 characters</p>
+                </div>
+
+                {/*Check whether password has at least one symbol and one number, and display validation requirements accordingly*/}
+                <div className="validation">
+                    {passwordCheck.test(watch("password"))
+                        ? <img src={greenTick} alt="valid" className="validation-icon"/>
+                        : <img src={redCross} alt="invalid" className="validation-icon"/>
+                    }
+                    <p id="requirement">Must contain at least one symbol and one number</p>
+                </div>
 
                 <input
                     type="password"
@@ -100,17 +126,33 @@ function Registerpage() {
                         }
                     })}
                 />
-                {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
+
+                {/*Check whether both passwords match, and display validation requirements accordingly*/}
+                <div className="validation">
+                    {watch("password") && watch("password") === watch("confirmPassword")
+                        ? <img src={greenTick} alt="valid" className="validation-icon"/>
+                        : <img src={redCross} alt="invalid" className="validation-icon"/>
+                    }
+                    <p id="requirement">Passwords must match</p>
+                </div>
 
                 <input
                     type="email"
                     className="input-bar login-detail"
                     placeholder="Enter e-mail address"
                     {...register("email", {
-                        required: "E-mail is required",
+                        required: "E-mail is required", pattern: emailCheck
                     })}
                 />
-                {errors.email && <p>{errors.email.message}</p>}
+
+                {/*Check whether e-mail address is valid, and display validation requirements accordingly*/}
+                <div className="validation">
+                    {emailCheck.test(watch("email"))
+                        ? <img src={greenTick} alt="valid" className="validation-icon"/>
+                        : <img src={redCross} alt="invalid" className="validation-icon"/>
+                    }
+                    <p id="requirement">Must be a valid e-mail address</p>
+                </div>
 
                 <button
                     type="submit"
