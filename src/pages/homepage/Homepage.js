@@ -10,7 +10,8 @@ import {createSearchParams} from 'react-router-dom';
 
 function Homepage({apikey}) {
     const [error, toggleError] = useState(false);
-    const [newslist, setNewslist] = useState();
+    const [newslist, setNewslist] = useState([]);
+    const [pageSize, setPageSize] = useState(15);
     const {authState: {userCountry}} = useContext(AuthContext);
     const params = { type: '', input: '' };
 
@@ -25,7 +26,7 @@ function Homepage({apikey}) {
                     setNewslist(result.data.articles);
                 }
                 else {
-                    const result = await axios.get(`https://newsapi.org/v2/top-headlines?country=nl&apiKey=${apikey}`);
+                    const result = await axios.get(`https://newsapi.org/v2/top-headlines?pageSize=${pageSize}&country=nl&apiKey=${apikey}`);
                     setNewslist(result.data.articles);
                 }
             } catch (e) {
@@ -36,7 +37,7 @@ function Homepage({apikey}) {
 
         fetchData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [pageSize])
 
     return (
         <>
@@ -70,6 +71,14 @@ function Homepage({apikey}) {
                     })
                 }
             </div>
+
+            <button
+                type="button"
+                className="load-more-button"
+                onClick={()=> setPageSize(pageSize + 15)}
+            >
+                Load more items
+            </button>
         </>
     );
 }

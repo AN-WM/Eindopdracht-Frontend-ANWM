@@ -1,6 +1,6 @@
 import axios from "axios";
 
-async function FetchArticleData(searchParams, apikey, setNewslist, toggleError) {
+async function FetchArticleData(searchParams, pageSize, apikey, setNewslist, toggleError) {
     const {searchQuery, searchType, sourceId, language, sortValue, startDate, endDate} = Object.fromEntries(searchParams);
     let sourceString = "";
     let languageString = "";
@@ -25,12 +25,11 @@ async function FetchArticleData(searchParams, apikey, setNewslist, toggleError) 
     }
 
     try {
-        // const result = await axios.get(`https://newsapi.org/v2/everything?q=${searchTerm}${sourceString}${languageString}${sortString}&apiKey=${apikey}`);
-        const result = await axios.get(`https://newsapi.org/v2/everything?q=${searchQuery}${sourceString}${languageString}${sortString}${startDateString}${endDateString}&apiKey=${apikey}`);
-        console.log(`https://newsapi.org/v2/everything?q=${searchQuery}${sourceString}${languageString}${sortString}${startDateString}${endDateString}&apiKey=${apikey}`)
+        const result = await axios.get(
+            `https://newsapi.org/v2/everything?q=${searchQuery}&pageSize=${pageSize}${sourceString}${languageString}${sortString}${startDateString}${endDateString}&apiKey=${apikey}`);
         toggleError(false);
         if (searchType === 'article') {
-            return result.data.articles;
+            return result.data;
         }
     } catch (e) {
         console.log(e);

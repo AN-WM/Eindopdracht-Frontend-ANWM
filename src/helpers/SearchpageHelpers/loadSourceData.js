@@ -2,7 +2,7 @@ import fetchSourceList from "./fetchSourceList";
 import createSourceArray from "./createSourceArray";
 import FetchSourceData from "./fetchSourceData";
 
-async function loadSourceData(searchQuery, searchType, apikey, setNewsList, toggleError, setErrorMessage) {
+async function loadSourceData(searchQuery, searchType, pageSize, apikey, setNewsList, setTotalResults, toggleError, setErrorMessage) {
     setErrorMessage("Oops, something went wrong");
 
     try {
@@ -13,14 +13,16 @@ async function loadSourceData(searchQuery, searchType, apikey, setNewsList, togg
             const sourceString = createSourceArray(searchType, sourceList).toString();
 
             //Fetch the articles, based on their source
-            const articlesBySource = await FetchSourceData(searchType, sourceString, apikey, toggleError);
-
+            // const articlesBySource = await FetchSourceData(searchType, sourceString, pageSize, apikey, toggleError);
+            const sourceData = await FetchSourceData(searchType, sourceString, pageSize, apikey, toggleError);
+            const articlesBySource = sourceData.articles;
             //Check whether articles were returned. If so, fill the newslist. If not, display an error message.
             if (articlesBySource === "ERR_BAD_REQUEST") {
                 setErrorMessage("No sources found, please try another query")
                 toggleError(true);
             } else {
                 setNewsList(articlesBySource)
+                setTotalResults(sourceData.totalResults);
             }
     } catch (e) {
         console.error(e);

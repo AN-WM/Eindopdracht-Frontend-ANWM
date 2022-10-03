@@ -11,7 +11,13 @@ import loadSourceData from "../../helpers/SearchpageHelpers/loadSourceData";
 
 function Searchpage({apikey}) {
     const [error, toggleError] = useState(false);
+    const [pageSize, setPageSize] = useState(15);
+    const [totalResults, setTotalResults] = useState(0);
     const [filterList, setFilterList] = useState([]);
+    const [oldParams, setOldParams] = useState({
+        searchQuery: "",
+        searchType: ""
+    })
     const [newsList, setNewsList] = useState([]);
     const [errorMessage, setErrorMessage] = useState("Oops, something went wrong");
     let [searchParams, setSearchParams] = useSearchParams();
@@ -31,11 +37,11 @@ function Searchpage({apikey}) {
             }
             //Fill the newsList, based on searchType, with the matching list of articles
             if (searchType === 'article') {
-                loadArticleData(searchParams, apikey, setNewsList, toggleError, setErrorMessage);
+                loadArticleData(searchParams, pageSize, apikey, setNewsList, setTotalResults, toggleError, setErrorMessage);
 
             } else if (searchType === 'source') {
-                loadSourceData(searchQuery, searchType, apikey, setNewsList, toggleError, setErrorMessage);
-
+                loadSourceData(searchQuery, searchType, pageSize, apikey, setNewsList, setTotalResults, toggleError, setErrorMessage);
+                console.log(totalResults);
             } else {
                 console.log("Error: unknown searchtype");
                 setErrorMessage("No valid searchtype was registered, please try again by selecting either source or article")
@@ -45,7 +51,7 @@ function Searchpage({apikey}) {
 
         loadData()
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [searchParams, apikey])
+    }, [searchParams, pageSize, apikey])
 
 
     return (
@@ -60,12 +66,19 @@ function Searchpage({apikey}) {
             />
 
             {error && <h4 className="error-message">{errorMessage}</h4>}
+            <div
+                className="total-results"
+            >
+                Total results: {totalResults}
+            </div>
 
             {newsList.length !== 0 &&
                 <div className="search-page-container">
                     <FilterBar
                         filterList={filterList}
                         setFilterList={setFilterList}
+                        oldParams={oldParams}
+                        setOldParams={setOldParams}
                         input={newsList}
                         searchParams={searchParams}
                         setSearchParams={setSearchParams}
@@ -89,6 +102,14 @@ function Searchpage({apikey}) {
                     </div>
                 </div>
             }
+
+            <button
+                type="button"
+                className="load-more-button"
+                onClick={()=> setPageSize(pageSize + 15)}
+            >
+                Load more items
+            </button>
         </>
     );
 }

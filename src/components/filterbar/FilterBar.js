@@ -3,16 +3,21 @@ import FilterBlock from "../filterblock/FilterBlock";
 import createList from "../../helpers/createList";
 import './FilterBar.css'
 
-function FilterBar({filterList, setFilterList, input, searchParams, setSearchParams, toggleError, setErrorMessage}) {
+function FilterBar({filterList, setFilterList, oldParams, setOldParams, input, searchParams, setSearchParams, toggleError, setErrorMessage}) {
     const [domainList, setDomainList] = useState([]);
     const {searchType, searchQuery} = Object.fromEntries([...searchParams]);
 
     useEffect(() => {
-        if (filterList.length === 0) {
+        // When a new search occurs
+        if (filterList.length === 0 || oldParams.searchQuery !== searchQuery || oldParams.searchType !== searchType) {
             if (input !== undefined && input.length !== 0) {
                 const newDomains = createList(input, 'domain')
                 setDomainList(newDomains);
                 setFilterList(newDomains);
+                setOldParams({
+                    searchQuery: searchQuery,
+                    searchType: searchType
+                })
             }
         } else {
             setDomainList(filterList);
@@ -21,10 +26,15 @@ function FilterBar({filterList, setFilterList, input, searchParams, setSearchPar
         }, []
     );
 
+    useEffect(() => {
+        setDomainList(filterList);
+    }, [searchParams])
+
     return (
         <div
             className="filter-bar"
         >
+
             <FilterBlock
                 blockType="date"
                 input="input"

@@ -329,7 +329,6 @@ function CreateBlock(blockType, inputList, searchParams, setSearchParams, toggle
 }
 
 function FilterBlock({blockType, inputList, searchParams, setSearchParams, toggleError, setErrorMessage}) {
-
     return (
         <>
             <form>

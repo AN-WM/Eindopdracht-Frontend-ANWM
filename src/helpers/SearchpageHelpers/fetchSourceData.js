@@ -1,10 +1,11 @@
 import axios from "axios";
 
-async function FetchSourceData(searchType, sourceString, apikey, toggleError) {
+async function FetchSourceData(searchType, sourceString, pageSize, apikey, toggleError) {
     try {
-        const result = await axios.get(`https://newsapi.org/v2/everything?sources=${sourceString}&apiKey=${apikey}`);
+        const result = await axios.get(`https://newsapi.org/v2/everything?sources=${sourceString}&pageSize=${pageSize}&apiKey=${apikey}`);
         toggleError(false);
-        return result.data.articles;
+        console.log(result.data.totalResults);
+        return result.data;
     } catch (e) {
         console.log(e);
         toggleError(true);

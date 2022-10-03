@@ -57,6 +57,12 @@ button {
     box-sizing: border-box;
 }
 
+.load-more-button {
+    width: var(--input-width);
+    height: 40px;
+    margin: 10px 0;
+}
+
 form {
     display: flex;
     flex-direction: column;
