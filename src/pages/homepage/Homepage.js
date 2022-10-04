@@ -1,12 +1,12 @@
 import React, {useContext, useEffect, useState} from 'react';
-import logo from "../../assets/Newslogo.png";
+import axios from "axios";
+import {AuthContext} from "../../context/AuthContext";
+import {createSearchParams} from 'react-router-dom';
 import Searchbar from "../../components/searchbar/Searchbar";
 import NewsTile from "../../components/newstile/NewsTile";
 import Header from "../../components/header/Header";
-import axios from "axios";
+import logo from "../../assets/Newslogo.png";
 import './Homepage.css';
-import {AuthContext} from "../../context/AuthContext";
-import {createSearchParams} from 'react-router-dom';
 
 function Homepage() {
     const [error, toggleError] = useState(false);

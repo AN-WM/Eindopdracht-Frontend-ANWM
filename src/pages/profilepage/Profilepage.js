@@ -1,13 +1,13 @@
 import React, {useContext, useState} from 'react';
+import {AuthContext} from "../../context/AuthContext";
 import {useForm} from "react-hook-form";
 import Header from "../../components/header/Header";
 import Searchbar from "../../components/searchbar/Searchbar";
-import profilepic from "../../assets/Generic profile pic change.png";
-import "./Profilepage.css";
-import {AuthContext} from "../../context/AuthContext";
 import updatePassword from "../../helpers/ProfilepageHelpers/updatePassword";
 import updateEmail from "../../helpers/ProfilepageHelpers/updateEmail";
 import updateCountry from "../../helpers/ProfilepageHelpers/updateCountry";
+import profilepic from "../../assets/Generic profile pic change.png";
+import "./Profilepage.css";
 
 function Profilepage({searchtype}) {
     const [error, toggleError] = useState(false);

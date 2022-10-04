@@ -1,7 +1,7 @@
-import React, {useState, useContext} from 'react';
-import './FilterBlock.css';
+import React, {useState} from 'react';
 import updateFilters from "../../helpers/FilterBlockHelpers/updateFilters";
 import checkDate from "../../helpers/FilterBlockHelpers/checkDate";
+import './FilterBlock.css';
 
 let languageArray = [{
     language: "",

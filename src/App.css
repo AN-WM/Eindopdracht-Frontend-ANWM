@@ -90,5 +90,5 @@ a {
 }
 
 .success-message {
-    color: green;
+    color: hsl(148, 100%, 31%);
 }

@@ -6,7 +6,7 @@
     flex-basis: var(--tile-width);
     height: 333px;
     margin: 12px 10px;
-    box-shadow: 1px 1px 4px 0px hsl(199, 12%, 70%);
+    box-shadow: 1px 1px 4px 0 hsl(199, 12%, 70%);
     box-sizing: border-box;
 }
 
@@ -39,8 +39,8 @@
 
 #pubDatum {
     font-weight: 300;
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
 }
 
 #tile-description {

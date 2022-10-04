@@ -1,6 +1,6 @@
 import React from 'react';
-import {useForm} from 'react-hook-form';
 import {useNavigate, createSearchParams} from 'react-router-dom';
+import {useForm} from 'react-hook-form';
 import './Searchbar.css';
 
 function Searchbar({placeHolder, searchType}) {

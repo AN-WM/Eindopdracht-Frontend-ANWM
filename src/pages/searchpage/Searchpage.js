@@ -1,14 +1,14 @@
 import React, {useContext, useEffect, useState} from 'react';
+import {AuthContext} from "../../context/AuthContext";
+import {useSearchParams} from "react-router-dom";
+import {v4 as uuidv4} from 'uuid';
 import Searchbar from "../../components/searchbar/Searchbar";
 import NewsTile from "../../components/newstile/NewsTile";
 import Header from "../../components/header/Header";
 import FilterBar from "../../components/filterbar/FilterBar";
-import './Searchpage.css';
-import {v4 as uuidv4} from 'uuid';
-import {useSearchParams} from "react-router-dom";
 import loadArticleData from "../../helpers/SearchpageHelpers/loadArticleData";
 import loadSourceData from "../../helpers/SearchpageHelpers/loadSourceData";
-import {AuthContext} from "../../context/AuthContext";
+import './Searchpage.css';
 
 function Searchpage() {
     const [error, toggleError] = useState(false);

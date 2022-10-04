@@ -1,4 +1,7 @@
 import React, {useState, useContext} from 'react';
+import axios from "axios";
+import {AuthContext} from "../../context/AuthContext";
+import {useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
 import Header from "../../components/header/Header";
 import Searchbar from "../../components/searchbar/Searchbar";
@@ -6,9 +9,6 @@ import logo from "../../assets/Newslogo.png";
 import greenTick from "../../assets/Green tick.png";
 import redCross from "../../assets/Red cross.png";
 import "./Registerpage.css";
-import axios from "axios";
-import {AuthContext} from "../../context/AuthContext";
-import {useNavigate} from "react-router-dom";
 
 function Registerpage() {
     const {signInFunction} = useContext(AuthContext);
@@ -167,6 +167,7 @@ function Registerpage() {
 
             <a
                 href={"/login"}
+                id="log-in-text"
             >
                 Already have an account? Log in here.
             </a>

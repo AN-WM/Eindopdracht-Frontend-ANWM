@@ -1,8 +1,8 @@
 import React from 'react';
-import './Newstile.css';
-import logo from "../../assets/News logo icon.png";
 import clipText from "../../helpers/clipText";
 import dateNotation from "../../helpers/dateNotation";
+import logo from "../../assets/News logo icon.png";
+import './Newstile.css';
 
 function NewsTile({article, error, toggleError}) {
     let cutOff = 0;

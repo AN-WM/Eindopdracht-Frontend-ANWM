@@ -1,17 +1,13 @@
 import React, {useContext} from "react";
-import {
-    BrowserRouter as Router,
-    Routes,
-    Route
-} from 'react-router-dom';
+import {AuthContext} from "./context/AuthContext";
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import Homepage from "./pages/homepage/Homepage.js"
 import Searchpage from "./pages/searchpage/Searchpage.js"
 import Loginpage from "./pages/loginpage/Loginpage.js"
 import Profilepage from "./pages/profilepage/Profilepage.js"
 import Registerpage from "./pages/registerpage/Registerpage";
-import './App.css';
 import PrivateRoute from "./components/PrivateRoute";
-import {AuthContext} from "./context/AuthContext";
+import './App.css';
 
 function App() {
     const {authState: {isAuth}} = useContext(AuthContext);
