@@ -4,7 +4,6 @@ async function FetchSourceData(searchType, sourceString, pageSize, apikey, toggl
     try {
         const result = await axios.get(`https://newsapi.org/v2/everything?sources=${sourceString}&pageSize=${pageSize}&apiKey=${apikey}`);
         toggleError(false);
-        console.log(result.data.totalResults);
         return result.data;
     } catch (e) {
         console.log(e);

@@ -2,6 +2,14 @@
     display: flex;
 }
 
+#total-results-text {
+    display: flex;
+    align-self: flex-start;
+    margin-left: 35px;
+    font-style: italic;
+    color: hsl(197, 12%, 29%);
+}
+
 .search-list {
     display: flex;
     flex-direction: row;

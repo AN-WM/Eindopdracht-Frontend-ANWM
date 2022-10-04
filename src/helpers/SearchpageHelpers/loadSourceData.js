@@ -17,7 +17,7 @@ async function loadSourceData(searchQuery, searchType, pageSize, apikey, setNews
             const sourceData = await FetchSourceData(searchType, sourceString, pageSize, apikey, toggleError);
             const articlesBySource = sourceData.articles;
             //Check whether articles were returned. If so, fill the newslist. If not, display an error message.
-            if (articlesBySource === "ERR_BAD_REQUEST") {
+            if (sourceData === "ERR_BAD_REQUEST") {
                 setErrorMessage("No sources found, please try another query")
                 toggleError(true);
             } else {

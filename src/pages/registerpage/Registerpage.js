@@ -12,7 +12,7 @@ import {useNavigate} from "react-router-dom";
 
 function Registerpage() {
     const {signInFunction} = useContext(AuthContext);
-    const {handleSubmit, formState: {errors}, register, watch, getValues} = useForm();
+    const {handleSubmit, register, watch} = useForm();
     const [errorMessage, setErrorMessage] = useState("Something went wrong");
     const [error, toggleError] = useState(false);
     const navigate = useNavigate();
@@ -89,6 +89,7 @@ function Registerpage() {
                     type="password"
                     className="input-bar login-detail"
                     placeholder="Enter password"
+                    maxLength="20"
                     {...register("password", {
                         required: "Password is required",
                         minLength: {value: 6}, pattern: passwordCheck
@@ -117,6 +118,7 @@ function Registerpage() {
                     type="password"
                     className="input-bar login-detail"
                     placeholder="Confirm password"
+                    maxLength="20"
                     {...register("confirmPassword", {
                         required: "Confirmed password is required",
                         validate: (value: string) => {

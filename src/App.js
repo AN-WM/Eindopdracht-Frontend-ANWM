@@ -15,9 +15,6 @@ import {AuthContext} from "./context/AuthContext";
 
 function App() {
     const {authState: {isAuth}} = useContext(AuthContext);
-    const apiKey = '4889b0ac0f97463aa0a71286db8da667';
-    // Alternate APIkey:
-    // const apiKey = '5d77ac405bbd4ac9972f3543df74af8c';
 
     return (
         <>
@@ -32,18 +29,14 @@ function App() {
                             <Route
                                 path="/"
                                 element={
-                                    <Homepage
-                                        apikey={apiKey}
-                                    />
+                                    <Homepage/>
                                 }
                             />
 
                             <Route
                                 path="/search-results/"
                                 element={
-                                    <Searchpage
-                                        apikey={apiKey}
-                                    />
+                                    <Searchpage/>
                                 }
                             />
 

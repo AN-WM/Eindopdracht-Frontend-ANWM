@@ -8,11 +8,11 @@ import './Homepage.css';
 import {AuthContext} from "../../context/AuthContext";
 import {createSearchParams} from 'react-router-dom';
 
-function Homepage({apikey}) {
+function Homepage() {
     const [error, toggleError] = useState(false);
     const [newslist, setNewslist] = useState([]);
     const [pageSize, setPageSize] = useState(15);
-    const {authState: {userCountry}} = useContext(AuthContext);
+    const {apiKey, authState: {userCountry}} = useContext(AuthContext);
     const params = { type: '', input: '' };
 
 
@@ -22,11 +22,11 @@ function Homepage({apikey}) {
         async function fetchData() {
             try {
                 if (userCountry !== undefined) {
-                    const result = await axios.get(`https://newsapi.org/v2/top-headlines?country=${userCountry}&apiKey=${apikey}`);
+                    const result = await axios.get(`https://newsapi.org/v2/top-headlines?country=${userCountry}&apiKey=${apiKey}`);
                     setNewslist(result.data.articles);
                 }
                 else {
-                    const result = await axios.get(`https://newsapi.org/v2/top-headlines?pageSize=${pageSize}&country=nl&apiKey=${apikey}`);
+                    const result = await axios.get(`https://newsapi.org/v2/top-headlines?pageSize=${pageSize}&country=nl&apiKey=${apiKey}`);
                     setNewslist(result.data.articles);
                 }
             } catch (e) {

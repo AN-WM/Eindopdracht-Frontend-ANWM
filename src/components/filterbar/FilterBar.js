@@ -3,31 +3,42 @@ import FilterBlock from "../filterblock/FilterBlock";
 import createList from "../../helpers/createList";
 import './FilterBar.css'
 
-function FilterBar({filterList, setFilterList, oldParams, setOldParams, input, searchParams, setSearchParams, toggleError, setErrorMessage}) {
+function FilterBar({
+                       filterList,
+                       setFilterList,
+                       oldParams,
+                       setOldParams,
+                       input,
+                       searchParams,
+                       setSearchParams,
+                       toggleError,
+                       setErrorMessage
+                   }) {
     const [domainList, setDomainList] = useState([]);
     const {searchType, searchQuery} = Object.fromEntries([...searchParams]);
 
     useEffect(() => {
-        // When a new search occurs
-        if (filterList.length === 0 || oldParams.searchQuery !== searchQuery || oldParams.searchType !== searchType) {
-            if (input !== undefined && input.length !== 0) {
-                const newDomains = createList(input, 'domain')
-                setDomainList(newDomains);
-                setFilterList(newDomains);
-                setOldParams({
-                    searchQuery: searchQuery,
-                    searchType: searchType
-                })
+            // When a new search occurs
+            if (filterList.length === 0 || oldParams.searchQuery !== searchQuery || oldParams.searchType !== searchType) {
+                if (input !== undefined && input.length !== 0) {
+                    const newDomains = createList(input, 'domain')
+                    setDomainList(newDomains);
+                    setFilterList(newDomains);
+                    setOldParams({
+                        searchQuery: searchQuery,
+                        searchType: searchType
+                    })
+                }
+            } else {
+                setDomainList(filterList);
             }
-        } else {
-            setDomainList(filterList);
-        }
-            // eslint-disable-next-line
+        // eslint-disable-next-line
         }, []
     );
 
     useEffect(() => {
         setDomainList(filterList);
+    // eslint-disable-next-line
     }, [searchParams])
 
     return (

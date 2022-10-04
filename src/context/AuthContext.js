@@ -4,6 +4,11 @@ import axios from "axios";
 export const AuthContext = createContext({});
 
 function AuthContextProvider({children}) {
+    const apiKey = '4889b0ac0f97463aa0a71286db8da667';
+    // Alternate APIkey:
+    // const apiKey = '5d77ac405bbd4ac9972f3543df74af8c';
+
+
     const [authState, setAuthState] = useState({
         isAuth: false,
         user: {
@@ -101,6 +106,7 @@ function AuthContextProvider({children}) {
 
     const data = {
         authState,
+        apiKey,
         changeAuthFunction: changeAuth,
         signInFunction: signIn,
         signOutFunction: signOut,

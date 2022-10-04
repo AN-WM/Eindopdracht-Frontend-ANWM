@@ -1,6 +1,6 @@
 import axios from "axios";
 
-async function FetchArticleData(searchParams, pageSize, apikey, setNewslist, toggleError) {
+async function FetchArticleData(searchParams, pageSize, apikey, setNewslist, toggleError, setErrorMessage) {
     const {searchQuery, searchType, sourceId, language, sortValue, startDate, endDate} = Object.fromEntries(searchParams);
     let sourceString = "";
     let languageString = "";
@@ -34,6 +34,7 @@ async function FetchArticleData(searchParams, pageSize, apikey, setNewslist, tog
     } catch (e) {
         console.log(e);
         toggleError(true);
+        setErrorMessage("No articles found, please try another query")
     }
 }
 

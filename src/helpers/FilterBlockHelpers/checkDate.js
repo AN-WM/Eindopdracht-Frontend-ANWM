@@ -1,7 +1,11 @@
 function checkDate(changeType, startDate, endDate, toggleError, setErrorMessage) {
+    const today = new Date();
     toggleError(false);
 
-    if (startDate > endDate) {
+    if (startDate > today.toISOString().split('T')[0]) {
+        toggleError(true);
+        setErrorMessage("'From'-date can't be in the future, please adjust")
+    } else if (startDate > endDate) {
         toggleError(true);
         setErrorMessage("'From'-date can't be before 'To'-date, please adjust either");
         return "error";

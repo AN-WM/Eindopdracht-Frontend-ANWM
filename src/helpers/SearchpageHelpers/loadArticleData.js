@@ -6,7 +6,7 @@ async function loadArticleData(searchParams, pageSize, apikey, setNewsList, setT
     try {
         //Fetch the articles, based on the searchQuery
         // const articlesByArticle = await FetchArticleData(searchParams, pageSize, apikey, setNewsList, toggleError);
-        const articleData = await FetchArticleData(searchParams, pageSize, apikey, setNewsList, toggleError);
+        const articleData = await FetchArticleData(searchParams, pageSize, apikey, setNewsList, toggleError, setErrorMessage);
         const articlesByArticle = articleData.articles;
         //Check whether articles were returned. If so, fill the newslist. If not, display an error message.
         if (articlesByArticle.length !== 0) {
@@ -18,6 +18,8 @@ async function loadArticleData(searchParams, pageSize, apikey, setNewsList, setT
         }
     } catch (e) {
         console.error(e);
+        setErrorMessage("No articles found, please try another query");
+        toggleError(true);
     }
 }
 
