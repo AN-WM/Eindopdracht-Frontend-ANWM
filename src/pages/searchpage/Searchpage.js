@@ -1,57 +1,59 @@
 import React, {useContext, useEffect, useState} from 'react';
+import {AuthContext} from "../../context/AuthContext";
+import {useSearchParams} from "react-router-dom";
+import {v4 as uuidv4} from 'uuid';
 import Searchbar from "../../components/searchbar/Searchbar";
 import NewsTile from "../../components/newstile/NewsTile";
 import Header from "../../components/header/Header";
 import FilterBar from "../../components/filterbar/FilterBar";
-import fetchSourceList from "../../helpers/fetchSourceList";
+import loadArticleData from "../../helpers/SearchpageHelpers/loadArticleData";
+import loadSourceData from "../../helpers/SearchpageHelpers/loadSourceData";
 import './Searchpage.css';
-import {SearchContext} from "../../context/SearchContext";
-import FetchArticleData from "../../helpers/fetchArticleData";
-import FetchSourceData from "../../helpers/fetchSourceData";
-import createSourceArray from "../../helpers/createSourceArray";
 
-function Searchpage({apikey}) {
+function Searchpage() {
+    const {apiKey} = useContext(AuthContext);
     const [error, toggleError] = useState(false);
+    const [pageSize, setPageSize] = useState(15);
+    const [totalResults, setTotalResults] = useState(0);
+    const [filterList, setFilterList] = useState([]);
     const [newsList, setNewsList] = useState([]);
-    const {searchValue: {searchTerm, searchType}} = useContext(SearchContext);
+    const [errorMessage, setErrorMessage] = useState("Oops, something went wrong");
+    let [searchParams, setSearchParams] = useSearchParams();
+    const {searchQuery, searchType} = Object.fromEntries(searchParams);
+    const [oldParams, setOldParams] = useState({
+        searchQuery: "",
+        searchType: ""
+    })
 
     useEffect(() => {
         toggleError(false);
 
         async function loadData() {
-            try {
-                //Fill the newsList, based on searchType, with the matching list of articles
-                if (searchType === 'article') {
+            setNewsList([]);
+            setErrorMessage("Oops, something went wrong");
 
-                    //Fetch the articles, based on the searchTerm
-                    const articlesByArticle = await FetchArticleData(searchType, searchTerm, apikey, setNewsList, toggleError);
+            //If no query has been entered, return an error.
+            if (searchQuery === "") {
+                setErrorMessage("Please enter a keyword to start your search");
+                toggleError(true);
 
-                    //Fill the newsList
-                    setNewsList(articlesByArticle);
-                } else if (searchType === 'source') {
-                    //Load an array of unique available sources, including the searchTerm
-                    const sourceList = await fetchSourceList(searchTerm, apikey, toggleError);
+            //Otherwise fill the newsList, based on searchType, with the matching list of articles
+            } else if (searchType === 'article') {
+                loadArticleData(searchParams, pageSize, apiKey, setNewsList, setTotalResults, toggleError, setErrorMessage);
 
-                    //Create a list of only the id's in the previous array and merge into one string
-                    const sourceString = createSourceArray(searchType, sourceList).toString();
+            } else if (searchType === 'source') {
+                loadSourceData(searchQuery, searchType, pageSize, apiKey, setNewsList, setTotalResults, toggleError, setErrorMessage);
 
-                    //Fetch the articles, based on their source
-                    const articlesBySource = await FetchSourceData(searchType, sourceString, apikey, toggleError);
-
-                    //Fill the newsList
-                    setNewsList(articlesBySource);
-                } else {
-                    console.log("Error: unknown searchtype");
-                    toggleError(true);
-                }
-            } catch (e) {
-                console.error(e);
+            } else {
+                console.log("Error: unknown searchtype");
+                setErrorMessage("No valid searchtype was registered, please try again by selecting either source or article")
+                toggleError(true);
             }
         }
 
         loadData()
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [searchTerm, searchType, apikey])
+    }, [searchParams, pageSize, apiKey])
 
 
     return (
@@ -60,34 +62,61 @@ function Searchpage({apikey}) {
                 page='searchpage'
             />
 
-            <Searchbar/>
+            <Searchbar
+                placeHolder={searchQuery}
+                searchType={searchType}
+            />
 
             <div className="search-page-container">
-                <FilterBar
-                    input={newsList}
-                />
+                    <FilterBar
+                        filterList={filterList}
+                        setFilterList={setFilterList}
+                        oldParams={oldParams}
+                        setOldParams={setOldParams}
+                        input={newsList}
+                        searchParams={searchParams}
+                        setSearchParams={setSearchParams}
+                        toggleError={toggleError}
+                        setErrorMessage={setErrorMessage}
+                    />
 
-                <div className="search-list">
-                    {error &&
-                        <p className="search-error">
-                            Something went wrong. Please try another search term.
-                        </p>
+                <div className="right-search-container">
+                    {!error &&
+                        <h4
+                            id="total-results-text"
+                        >
+                            {totalResults} results
+                        </h4>
                     }
 
-                    {newslist &&
-                        newslist.map((input) => {
-                            return (
-                                <NewsTile
-                                    article={input}
-                                    key={input.url + input.id}
-                                    error={error}
-                                    toggleError={toggleError}
-                                />
-                            )
-                        })
-                    }
+                    <div className="search-list">
+                        {error && <h4 className="error-message">{errorMessage}</h4>}
+
+                        {newsList &&
+                            newsList.map((input) => {
+                                return (
+                                    <NewsTile
+                                        article={input}
+                                        key={input.url + uuidv4()}
+                                        error={error}
+                                        toggleError={toggleError}
+                                    />
+                                )
+                            })
+                        }
+                    </div>
                 </div>
             </div>
+
+            {newsList && newsList.length !== 0 && totalResults > 15 &&
+                <button
+                    type="button"
+                    className="load-more-button"
+                    onClick={() => setPageSize(pageSize + 15)}
+                >
+                    Load more items
+                </button>
+            }
         </>
     );
 }

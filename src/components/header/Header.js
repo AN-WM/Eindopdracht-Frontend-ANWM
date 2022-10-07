@@ -1,9 +1,9 @@
 import React, {useContext} from 'react';
+import {AuthContext} from "../../context/AuthContext";
+import {Link, useNavigate} from "react-router-dom";
 import logo from "../../assets/Newslogo.png";
 import blankUserIcon from "../../assets/User icon.png"
 import './Header.css';
-import {AuthContext} from "../../context/AuthContext";
-import {Link, useNavigate} from "react-router-dom";
 
 function Header({page}) {
     const {authState: {isAuth}, signOutFunction} = useContext(AuthContext);
@@ -20,7 +20,7 @@ function Header({page}) {
 
     function signOut() {
         signOutFunction();
-        navigate("/");
+        navigate(0);
     }
 
     return (

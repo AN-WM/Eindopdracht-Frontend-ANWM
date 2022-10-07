@@ -10,6 +10,7 @@ async function updateEmail(newEmail, toggleError, token) {
                 }}
         );
         toggleError(false);
+        return result.status;
     } catch (e) {
         console.log(e);
         toggleError(true);

@@ -1,12 +1,16 @@
 import React from 'react';
-import './Newstile.css';
-import logo from "../../assets/News logo icon.png";
 import clipText from "../../helpers/clipText";
 import dateNotation from "../../helpers/dateNotation";
+import logo from "../../assets/News logo icon.png";
+import './Newstile.css';
 
 function NewsTile({article, error, toggleError}) {
-    const cutOff = article.title.lastIndexOf(" - ");
-    let cleanTitle = (cutOff >= 0) ? article.title.substring(0, cutOff - 1) : article.title;
+    let cutOff = 0;
+    let cleanTitle = article.title;
+    if (article.title !== null) {
+        cutOff = article.title.lastIndexOf(" - ");
+        cleanTitle = (cutOff >= 0) ? article.title.substring(0, cutOff - 1) : article.title;
+    }
 
     return (
         <a

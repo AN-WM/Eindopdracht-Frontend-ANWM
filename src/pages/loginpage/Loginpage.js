@@ -1,20 +1,25 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
+import {AuthContext} from "../../context/AuthContext";
+import {useNavigate} from "react-router-dom";
 import {useForm} from 'react-hook-form';
 import Searchbar from "../../components/searchbar/Searchbar";
 import Header from "../../components/header/Header";
 import logo from "../../assets/Newslogo.png";
 import "./Loginpage.css";
-import {AuthContext} from "../../context/AuthContext";
-import {useNavigate} from "react-router-dom";
 
 function Loginpage() {
     const {handleSubmit, formState: {errors}, register} = useForm();
     const {signInFunction} = useContext(AuthContext);
+    const [signInError, toggleSignInError] = useState(false);
     const navigate = useNavigate();
 
-    function onFormSubmit(data) {
-        signInFunction(data.username, data.password);
-        navigate('/profile');
+    async function onFormSubmit(data) {
+        toggleSignInError(false);
+
+        //Try to sign in with provided username and password
+        const returnCode = await signInFunction(data.username, data.password);
+        //If sign in succeeded, proceed to home page. If not, display error message.
+        returnCode === 200 ? navigate('/') : toggleSignInError(true);
     }
 
     return (
@@ -29,6 +34,8 @@ function Loginpage() {
 
             <h1>Welcome back!</h1>
 
+            {signInError && <h4 className="error-message">The username or password you entered is incorrect</h4>}
+
             <form
                 onSubmit={handleSubmit(onFormSubmit)}
             >
@@ -38,7 +45,7 @@ function Loginpage() {
                     placeholder="Enter username"
                     {...register("username", {required: "Username is required"})}
                 />
-                {errors.username && <p>{errors.username.message}</p>}
+                {errors.username && <h4 className="error-message">{errors.username.message}</h4>}
 
                 <input
                     type="password"
@@ -46,7 +53,7 @@ function Loginpage() {
                     placeholder="Enter password"
                     {...register("password", {required: "Password is required"})}
                 />
-                {errors.password && <p>{errors.password.message}</p>}
+                {errors.password && <h4 className="error-message">{errors.password.message}</h4>}
 
                 <button
                     type="submit"

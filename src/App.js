@@ -1,20 +1,16 @@
-import React from "react";
-import {
-    BrowserRouter as Router,
-    Routes,
-    Route
-} from 'react-router-dom';
+import React, {useContext} from "react";
+import {AuthContext} from "./context/AuthContext";
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import Homepage from "./pages/homepage/Homepage.js"
 import Searchpage from "./pages/searchpage/Searchpage.js"
 import Loginpage from "./pages/loginpage/Loginpage.js"
 import Profilepage from "./pages/profilepage/Profilepage.js"
 import Registerpage from "./pages/registerpage/Registerpage";
+import PrivateRoute from "./components/PrivateRoute";
 import './App.css';
 
 function App() {
-
-    // const apiKey = '5d77ac405bbd4ac9972f3543df74af8c';
-    const apiKey = '4889b0ac0f97463aa0a71286db8da667';
+    const {authState: {isAuth}} = useContext(AuthContext);
 
     return (
         <>
@@ -29,21 +25,14 @@ function App() {
                             <Route
                                 path="/"
                                 element={
-                                    <Homepage
-                                        country="nl"
-                                        apikey={apiKey}
-                                    />
+                                    <Homepage/>
                                 }
                             />
 
                             <Route
-                                path="/search-results"
+                                path="/search-results/"
                                 element={
-                                    <Searchpage
-                                        searchkey="test"
-                                        country="nl"
-                                        apikey={apiKey}
-                                    />
+                                    <Searchpage/>
                                 }
                             />
 
@@ -64,7 +53,11 @@ function App() {
                             <Route
                                 path="/profile"
                                 element={
-                                    <Profilepage/>
+                                    <PrivateRoute
+                                        auth={isAuth}
+                                    >
+                                        <Profilepage/>
+                                    </PrivateRoute>
                                 }
                             />
                         </Routes>

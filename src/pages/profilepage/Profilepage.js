@@ -1,35 +1,49 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useState} from 'react';
+import {AuthContext} from "../../context/AuthContext";
 import {useForm} from "react-hook-form";
 import Header from "../../components/header/Header";
 import Searchbar from "../../components/searchbar/Searchbar";
+import updatePassword from "../../helpers/ProfilepageHelpers/updatePassword";
+import updateEmail from "../../helpers/ProfilepageHelpers/updateEmail";
+import updateCountry from "../../helpers/ProfilepageHelpers/updateCountry";
 import profilepic from "../../assets/Generic profile pic change.png";
 import "./Profilepage.css";
-import {AuthContext} from "../../context/AuthContext";
-import updatePassword from "../../helpers/updatePassword";
-import updateEmail from "../../helpers/updateEmail";
-import updateCountry from "../../helpers/updateCountry";
 
 function Profilepage({searchtype}) {
     const [error, toggleError] = useState(false);
-    const {authState: {userName, userEmail, userCountry, userImage}, fetchUserFunction} = useContext(AuthContext);
+    const {authState: {userName, userEmail, userCountry}, fetchUserFunction} = useContext(AuthContext);
     const {handleSubmit, formState: {errors}, register, watch} = useForm();
     const token = localStorage.getItem('token');
+    const [updateMessage, toggleUpdateMessage] = useState(false);
 
     async function onFormSubmit(data) {
+        toggleUpdateMessage(false);
+
         //Update password, if new password has been entered
         if (data.password !== undefined && data.password !== "") {
             const passwordResponse = await updatePassword(data, toggleError, token);
-            passwordResponse === 200 && fetchUserFunction(token);
+            if (passwordResponse === 200) {
+                fetchUserFunction(token);
+                toggleUpdateMessage(true);
+            }
         }
+
         //Update email, if new email has been entered
         if (data.email !== undefined && data.email !== "") {
             const emailResponse = await updateEmail(data.email, toggleError, token);
-            emailResponse === 200 && fetchUserFunction(token);
+            if (emailResponse === 200) {
+                fetchUserFunction(token);
+                toggleUpdateMessage(true);
+            }
         }
+
         //Update country, if new country has been entered
         if (data.country !== undefined && data.country !== "") {
             const countryResponse = await updateCountry(data.country, toggleError, token);
-            countryResponse === 200 && fetchUserFunction(token);
+            if (countryResponse === 200) {
+                fetchUserFunction(token);
+                toggleUpdateMessage(true);
+            }
         }
     }
 
@@ -48,7 +62,11 @@ function Profilepage({searchtype}) {
             <h1>Profile</h1>
 
             {error &&
-                <p>Unable to fetch profile data</p>
+                <h4 className="error-message">Unable to fetch profile data</h4>
+            }
+
+            {updateMessage &&
+                <h4 className="success-message">Profile has been updated</h4>
             }
 
             <form
@@ -67,7 +85,7 @@ function Profilepage({searchtype}) {
                         disabled
                     />
                 </label>
-                {errors.username && <p>{errors.username.message}</p>}
+                {errors.username && <h4 className="error-message">{errors.username.message}</h4>}
 
                 <label
                     className="profile-item"
@@ -85,7 +103,7 @@ function Profilepage({searchtype}) {
                         })}
                     />
                 </label>
-                {errors.password && <p>{errors.password.message}</p>}
+                {errors.password && <h4 className="error-message">{errors.password.message}</h4>}
 
                 <label
                     className="profile-item"
@@ -104,7 +122,7 @@ function Profilepage({searchtype}) {
                         })}
                     />
                 </label>
-                {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
+                {errors.confirmPassword && <h4 className="error-message">{errors.confirmPassword.message}</h4>}
 
                 <label
                     className="profile-item"
@@ -118,7 +136,7 @@ function Profilepage({searchtype}) {
                         })}
                     />
                 </label>
-                {errors.email && <p>{errors.email.message}</p>}
+                {errors.email && <h4 className="error-message">{errors.email.message}</h4>}
 
                 <label
                     className="profile-item"

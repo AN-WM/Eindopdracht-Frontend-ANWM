@@ -1,9 +1,12 @@
-import React, {useState, useContext} from 'react';
+import React, {useState} from 'react';
+import updateFilters from "../../helpers/FilterBlockHelpers/updateFilters";
+import checkDate from "../../helpers/FilterBlockHelpers/checkDate";
 import './FilterBlock.css';
-import {SearchContext} from "../../context/SearchContext";
-
 
 let languageArray = [{
+    language: "",
+    full: "All"
+}, {
     language: "ar",
     full: "Arabic"
 }, {
@@ -47,15 +50,72 @@ let languageArray = [{
 
 let briefLanguageArray = languageArray.slice(0, 5);
 
-function CreateBlock(blockType, inputList) {
+function CreateBlock(blockType, inputList, searchParams, setSearchParams, toggleError, setErrorMessage) {
     const [languageBrief, toggleLanguageBrief] = useState(false);
-    const [authorBrief, toggleAuthorBrief] = useState(false);
     const [sourceBrief, toggleSourceBrief] = useState(false);
-    const {searchValue: {language}, submitSearchValue} = useContext(SearchContext);
+    const {sourceId, startDate, endDate} = Object.fromEntries([...searchParams]);
 
-    function checkBox(value) {
-        let checkedString = language + value;
-        console.log(checkedString);
+    function handleChange(e, filter) {
+        const oldParams = Object.fromEntries([...searchParams]);
+        switch (filter) {
+            case 'date':
+                let dateValue = '';
+                let processedDate = '';
+
+                if (e === "start") {
+                    dateValue = document.getElementById("dateStart").value;
+                    if (dateValue !== "") {
+                        processedDate = checkDate("start", dateValue, endDate, toggleError, setErrorMessage)
+                        processedDate !== "error" &&
+                        setSearchParams({
+                            ...oldParams,
+                            startDate: processedDate
+                        })
+                    } else {
+                        setSearchParams({
+                            ...oldParams,
+                            startDate: ""
+                        })
+                    }
+                } else if (e === "end") {
+                    dateValue = document.getElementById("dateEnd").value;
+                    if (dateValue !== "") {
+                        processedDate = checkDate("end", startDate, dateValue, toggleError, setErrorMessage);
+                        processedDate !== "error" &&
+                        setSearchParams({
+                            ...oldParams,
+                            endDate: processedDate
+                        })
+                    } else {
+                        setSearchParams({
+                            ...oldParams,
+                            endDate: ""
+                        })
+                    }
+                }
+                break;
+            case 'source':
+                setSearchParams({
+                    ...oldParams,
+                    sourceId: updateFilters(sourceId, e.input)
+                })
+                break;
+            case 'language':
+                setSearchParams({
+                    ...oldParams,
+                    language: e.input.language
+                })
+                break;
+            case 'sort':
+                const sortValue = document.getElementById("sort").value;
+                setSearchParams({
+                    ...oldParams,
+                    sortValue: sortValue
+                })
+                break;
+            default:
+                console.log("No filtertype selected");
+        }
     }
 
     switch (blockType) {
@@ -67,8 +127,9 @@ function CreateBlock(blockType, inputList) {
                     From:
                     <input
                         type="date"
-                        id="date-start"
-                        name="date-start"
+                        id="dateStart"
+                        defaultValue={startDate}
+                        onChange={() => handleChange("start", "date")}
                     />
                 </label>
 
@@ -76,90 +137,121 @@ function CreateBlock(blockType, inputList) {
                     To:
                     <input
                         type="date"
-                        id="date-end"
-                        name="date-end"
+                        id="dateEnd"
+                        defaultValue={endDate}
+                        onChange={() => handleChange("end", "date")}
                     />
                 </label>
             </div>;
 
         case 'source':
             if (inputList !== undefined) {
-                let briefList = inputList.slice(0, 5);
-                return (sourceBrief === false ?
-                        //Basic source list, with button to show more
-                        <div className="filter-block">
-                            <h3>Source</h3>
-                            {briefList.map((input) => {
-                                return (
-                                    <div
-                                        className="select-option"
-                                        key={input}
-                                    >
-                                        <input
-                                            type="checkbox"
-                                            id={input}
-                                            name={input}
-                                            value={input}
-                                        />
-                                        <label
-                                            htmlFor={input}
+                if (inputList.length > 5) {
+                    let briefList = inputList.slice(0, 5);
+                    return (sourceBrief === false ?
+                            //Basic source list, with button to show more
+                            <div className="filter-block">
+                                <h3>Source</h3>
+                                {briefList.map((input) => {
+                                    return (
+                                        <div
+                                            className="select-option"
+                                            key={input}
                                         >
-                                            {input}
-                                        </label>
-                                    </div>
-                                )
-                            })}
+                                            <input
+                                                type="checkbox"
+                                                id={input}
+                                                name={input}
+                                                value={input}
+                                                onChange={() => handleChange({input}, "source")}
+                                            />
+                                            <label
+                                                htmlFor={input}
+                                            >
+                                                {input}
+                                            </label>
+                                        </div>
+                                    )
+                                })}
 
-                            <button
-                                type="button"
-                                className="see-more"
-                                onClick={() => toggleSourceBrief(!sourceBrief)}
-                            >
-                                See more
-                            </button>
-                        </div>
-                        :
-                        //Full source list, with button to show less
-                        <div className="filter-block">
-                            <h3>Source</h3>
+                                <button
+                                    type="button"
+                                    className="see-more"
+                                    onClick={() => toggleSourceBrief(!sourceBrief)}
+                                >
+                                    See more
+                                </button>
+                            </div>
+                            :
+                            //Full source list, with button to show less
+                            <div className="filter-block">
+                                <h3>Source</h3>
 
-                            {inputList.map((input) => {
-                                return (
-                                    <div
-                                        className="select-option"
-                                        key={input}
-                                    >
-                                        <input
-                                            type="checkbox"
-                                            id={input}
-                                            name={input}
-                                            value={input}
-                                        />
-
-                                        <label
-                                            htmlFor={input}
+                                {inputList.map((input) => {
+                                    return (
+                                        <div
+                                            className="select-option"
+                                            key={input}
                                         >
-                                            {input}
-                                        </label>
-                                    </div>
-                                )
-                            })}
+                                            <input
+                                                type="checkbox"
+                                                id={input}
+                                                name={input}
+                                                value={input}
+                                                onChange={() => handleChange({input}, "source")}
+                                            />
 
-                            <button
-                                type="button"
-                                className="see-less"
-                                onClick={() => toggleSourceBrief(!sourceBrief)}
-                            >
-                                See less
-                            </button>
-                        </div>
-                );
+                                            <label
+                                                htmlFor={input}
+                                            >
+                                                {input}
+                                            </label>
+                                        </div>
+                                    )
+                                })}
+
+                                <button
+                                    type="button"
+                                    className="see-less"
+                                    onClick={() => toggleSourceBrief(!sourceBrief)}
+                                >
+                                    See less
+                                </button>
+                            </div>
+                    );
+                } else {
+                    return <div className="filter-block">
+                        <h3>Source</h3>
+                        {inputList.map((input) => {
+                            return (
+                                <div
+                                    className="select-option"
+                                    key={input}
+                                >
+                                    <input
+                                        type="checkbox"
+                                        id={input}
+                                        name={input}
+                                        value={input}
+                                        onChange={() => handleChange({input}, "source")}
+                                    />
+
+                                    <label
+                                        htmlFor={input}
+                                    >
+                                        {input}
+                                    </label>
+                                </div>
+                            )
+                        })}
+                    </div>
+                }
             }
             break;
 
         case 'language':
             return (languageBrief === false ?
-                //Basis array van talen, met knop om meer talen te tonen.
+                //Basic language array, with button to see more options
                 <div className="filter-block">
                     <h3>Language</h3>
 
@@ -170,10 +262,11 @@ function CreateBlock(blockType, inputList) {
                                 key={input.language}
                             >
                                 <input
-                                    type="checkbox"
+                                    type="radio"
                                     id={input.language}
-                                    name={input.language}
+                                    name="language"
                                     value={input.language}
+                                    onChange={() => handleChange({input}, "language")}
                                 />
                                 <label
                                     htmlFor={input.language}
@@ -193,7 +286,7 @@ function CreateBlock(blockType, inputList) {
                     </button>
                 </div>
                 :
-                //Uitgebreide array van talen, met knop om minder opties te tonen.
+                //Extended language array, with button to show less options
                 <div className="filter-block">
                     <h3>Language</h3>
 
@@ -204,11 +297,11 @@ function CreateBlock(blockType, inputList) {
                                 key={input.language}
                             >
                                 <input
-                                    type="checkbox"
+                                    type="radio"
                                     id={input.language}
-                                    name={input.language}
+                                    name="language"
                                     value={input.language}
-
+                                    onChange={() => handleChange({input}, "language")}
                                 />
 
                                 <label htmlFor={input.language}>
@@ -227,92 +320,18 @@ function CreateBlock(blockType, inputList) {
                     </button>
                 </div>);
 
-        case 'author':
-            if (inputList !== undefined) {
-                let briefList = inputList.slice(0, 5);
-                return (authorBrief === false ?
-                        //Basic author list, with button to show more
-                        <div className="filter-block">
-                            <h3>Author</h3>
-
-                            {briefList.map((input) => {
-                                return (
-                                    <div
-                                        className="select-option"
-                                        key={input}
-                                    >
-                                        <input
-                                            type="checkbox"
-                                            id={input}
-                                            name={input}
-                                            value={input}
-
-                                        />
-                                        <label
-                                            htmlFor={input}
-                                        >
-                                            {input}
-                                        </label>
-                                    </div>
-                                )
-                            })}
-
-                            <button
-                                type="button"
-                                className="see-more"
-                                onClick={() => toggleAuthorBrief(!authorBrief)}
-                            >
-                                See more
-                            </button>
-                        </div>
-                        :
-                        //Full author list, with button to show less
-                        <div
-                            className="filter-block"
-                        >
-                            <h3>Author</h3>
-
-                            {inputList.map((input) => {
-                                return (
-                                    <div
-                                        className="select-option"
-                                        key={input}
-                                    >
-                                        <input
-                                            type="checkbox"
-                                            id={input}
-                                            name={input}
-                                            value={input}
-
-                                        />
-                                        <label
-                                            htmlFor={input}
-                                        >
-                                            {input}
-                                        </label>
-                                    </div>
-                                )
-                            })}
-
-                            <button
-                                type="button"
-                                className="see-less"
-                                onClick={() => toggleAuthorBrief(!authorBrief)}
-                            >
-                                See less
-                            </button>
-                        </div>
-                );
-            }
-            break;
-
         case 'sort':
             return <div className="filter-block">
                 <h3>Sort by</h3>
 
-                <select name="sort" id="sort">
-                    <option value="date">Newest first</option>
-                    <option value="relevance">Relevancy</option>
+                <select
+                    name="sort"
+                    id="sort"
+                    onChange={() => handleChange("empty", "sort")}
+                >
+                    <option value="">Select option</option>
+                    <option value="publishedAt">Newest first</option>
+                    <option value="relevancy">Relevancy</option>
                     <option value="popularity">Popularity</option>
                 </select>
             </div>;
@@ -322,10 +341,12 @@ function CreateBlock(blockType, inputList) {
     }
 }
 
-function FilterBlock({blockType, inputList}) {
+function FilterBlock({blockType, inputList, searchParams, setSearchParams, toggleError, setErrorMessage}) {
     return (
         <>
-            {CreateBlock(blockType, inputList)}
+            <form>
+                {CreateBlock(blockType, inputList, searchParams, setSearchParams, toggleError, setErrorMessage)}
+            </form>
         </>
     );
 }
