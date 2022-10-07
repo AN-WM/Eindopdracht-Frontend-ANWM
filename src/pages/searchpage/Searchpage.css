@@ -1,5 +1,7 @@
 .search-page-container {
     display: flex;
+    width: 1400px;
+    justify-content: flex-start;
 }
 
 #total-results-text {
@@ -20,3 +22,4 @@
     flex-grow: 0;
     flex-shrink: 1;
 }
+
