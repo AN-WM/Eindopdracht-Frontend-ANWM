@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import FilterBlock from "../filterblock/FilterBlock";
-import createList from "../../helpers/createList";
+import createDomainList from "../../helpers/createDomainList";
 import './FilterBar.css'
 
 function FilterBar({
@@ -15,37 +15,33 @@ function FilterBar({
                        setErrorMessage
                    }) {
     const [domainList, setDomainList] = useState([]);
-    const {searchType, searchQuery} = Object.fromEntries([...searchParams]);
+    const {searchType, searchQuery, language} = Object.fromEntries([...searchParams]);
 
     useEffect(() => {
+        if (input && input.length > 0) {
             // When a new search occurs
-            if (filterList.length === 0 || oldParams.searchQuery !== searchQuery || oldParams.searchType !== searchType) {
-                if (input !== undefined && input.length !== 0) {
-                    const newDomains = createList(input, 'domain')
-                    setDomainList(newDomains);
-                    setFilterList(newDomains);
-                    setOldParams({
-                        searchQuery: searchQuery,
-                        searchType: searchType
-                    })
-                }
+            if (filterList.length === 0
+                || oldParams.searchQuery !== searchQuery
+                || oldParams.searchType !== searchType
+                || oldParams.language !== language) {
+                createDomainList(input, searchQuery, searchType, setDomainList, setFilterList, oldParams, setOldParams);
+            // In case of changes outside of filter list
             } else {
                 setDomainList(filterList);
             }
+        }
         // eslint-disable-next-line
-        }, []
-    );
+    }, [input, searchParams]);
 
     useEffect(() => {
         setDomainList(filterList);
-    // eslint-disable-next-line
+        // eslint-disable-next-line
     }, [searchParams])
 
     return (
         <div
             className="filter-bar"
         >
-
             <FilterBlock
                 blockType="date"
                 input="input"

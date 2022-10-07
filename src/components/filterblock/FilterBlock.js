@@ -55,7 +55,6 @@ function CreateBlock(blockType, inputList, searchParams, setSearchParams, toggle
     const [sourceBrief, toggleSourceBrief] = useState(false);
     const {sourceId, startDate, endDate} = Object.fromEntries([...searchParams]);
 
-
     function handleChange(e, filter) {
         const oldParams = Object.fromEntries([...searchParams]);
         switch (filter) {
@@ -65,20 +64,34 @@ function CreateBlock(blockType, inputList, searchParams, setSearchParams, toggle
 
                 if (e === "start") {
                     dateValue = document.getElementById("dateStart").value;
-                    processedDate = checkDate("start", dateValue, endDate, toggleError, setErrorMessage)
-                    processedDate !== "error" &&
+                    if (dateValue !== "") {
+                        processedDate = checkDate("start", dateValue, endDate, toggleError, setErrorMessage)
+                        processedDate !== "error" &&
                         setSearchParams({
                             ...oldParams,
                             startDate: processedDate
                         })
+                    } else {
+                        setSearchParams({
+                            ...oldParams,
+                            startDate: ""
+                        })
+                    }
                 } else if (e === "end") {
                     dateValue = document.getElementById("dateEnd").value;
-                    processedDate = checkDate("end", startDate, dateValue, toggleError, setErrorMessage);
-                    processedDate !== "error" &&
+                    if (dateValue !== "") {
+                        processedDate = checkDate("end", startDate, dateValue, toggleError, setErrorMessage);
+                        processedDate !== "error" &&
                         setSearchParams({
                             ...oldParams,
                             endDate: processedDate
                         })
+                    } else {
+                        setSearchParams({
+                            ...oldParams,
+                            endDate: ""
+                        })
+                    }
                 }
                 break;
             case 'source':
@@ -238,7 +251,7 @@ function CreateBlock(blockType, inputList, searchParams, setSearchParams, toggle
 
         case 'language':
             return (languageBrief === false ?
-                //Basis array van talen, met knop om meer talen te tonen.
+                //Basic language array, with button to see more options
                 <div className="filter-block">
                     <h3>Language</h3>
 
@@ -273,7 +286,7 @@ function CreateBlock(blockType, inputList, searchParams, setSearchParams, toggle
                     </button>
                 </div>
                 :
-                //Uitgebreide array van talen, met knop om minder opties te tonen.
+                //Extended language array, with button to show less options
                 <div className="filter-block">
                     <h3>Language</h3>
 

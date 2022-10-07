@@ -24,10 +24,12 @@ function Homepage() {
                 if (userCountry !== undefined) {
                     const result = await axios.get(`https://newsapi.org/v2/top-headlines?country=${userCountry}&apiKey=${apiKey}`);
                     setNewslist(result.data.articles);
+                    console.log(result.data.articles);
                 }
                 else {
                     const result = await axios.get(`https://newsapi.org/v2/top-headlines?pageSize=${pageSize}&country=nl&apiKey=${apiKey}`);
                     setNewslist(result.data.articles);
+                    console.log(result.data.articles);
                 }
             } catch (e) {
                 console.log(e);

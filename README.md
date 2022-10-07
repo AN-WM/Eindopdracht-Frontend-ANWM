@@ -38,6 +38,8 @@ Wat kan je met News app:
 - Ook is het mogelijk om per bron het meest recente nieuws te bekijken door een bron-zoekopdracht te doen.
 - Per zoekopdracht zijn diverse filters mogelijk om de resultaten nog verder te verfijnen.
 
+![Searchpage screenshot](src/assets/Searchpage_screenshot.png)
+
 --------------------------
 
 <h2>

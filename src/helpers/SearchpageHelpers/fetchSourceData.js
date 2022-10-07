@@ -1,6 +1,7 @@
 import axios from "axios";
 
 async function FetchSourceData(searchType, sourceString, pageSize, apikey, toggleError) {
+
     try {
         const result = await axios.get(`https://newsapi.org/v2/everything?sources=${sourceString}&pageSize=${pageSize}&apiKey=${apikey}`);
         toggleError(false);

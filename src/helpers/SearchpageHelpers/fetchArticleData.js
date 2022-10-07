@@ -1,6 +1,6 @@
 import axios from "axios";
 
-async function FetchArticleData(searchParams, pageSize, apikey, setNewslist, toggleError, setErrorMessage) {
+async function fetchArticleData(searchParams, pageSize, apikey, setNewslist, toggleError, setErrorMessage) {
     const {searchQuery, searchType, sourceId, language, sortValue, startDate, endDate} = Object.fromEntries(searchParams);
     let sourceString = "";
     let languageString = "";
@@ -38,4 +38,4 @@ async function FetchArticleData(searchParams, pageSize, apikey, setNewslist, tog
     }
 }
 
-export default FetchArticleData;
+export default fetchArticleData;
